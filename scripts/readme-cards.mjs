@@ -1,12 +1,13 @@
 // node scripts/readme-cards.mjs
 //
-// Draws the README's project cards, the tech stack and the "Find me" buttons in the brain map's
-// style, light and dark (GitHub shows the one that matches the viewer's theme):
+// Draws the README's work and project cards, the tech stack and the link buttons in the brain
+// map's style, light and dark (GitHub shows the one that matches the viewer's theme):
+//   assets/cards/work-filesure-{light,dark}.png
 //   assets/cards/project-<slug>-{light,dark}.png
 //   assets/cards/stack-{light,dark}.png
 //   assets/cards/link-<slug>-{light,dark}.png
 //
-// To update: edit PROJECTS, STACK or LINKS below, run this, commit the PNGs. Icons come from
+// To update: edit WORK, PROJECTS, STACK or LINKS below, run this, commit the PNGs. Icons come from
 // assets/cards/icons.json (Simple Icons, CC0, and Feather/Lucide/Tabler, MIT/ISC, with brand
 // colours). Needs Google Chrome (set CHROME_PATH if it isn't in /Applications).
 import { execFileSync } from "node:child_process";
@@ -20,17 +21,20 @@ const CHROME = process.env.CHROME_PATH || "/Applications/Google Chrome.app/Conte
 const font = pathToFileURL(path.join(root, "assets", "fonts", "geist.woff2")).href;
 const ICONS = JSON.parse(readFileSync(path.join(root, "assets", "cards", "icons.json"), "utf8"));
 
-// Each card links to its repository; `live` adds the "Live demo" mark.
+// My job, as a wide card. Only what is already public (the brain map, the app stores).
+const WORK = {
+  kind: "Work · Software Engineer · Apr – Oct 2026", title: "FileSure",
+  text: "Built FileSure's iOS and Android app from scratch, rebuilt company screening for 3.8M companies on ClickHouse, and led the backend's move from AWS to GCP. Intern to Software Engineer in 3 months.",
+  tech: [["react", "React Native"], ["nextjs", "Next.js"], ["nodejs", "Node.js"], ["mongodb", "MongoDB"], ["clickhouse", "ClickHouse"], ["gcp", "Google Cloud"], ["aws", "AWS"], ["jenkins", "Jenkins"]],
+  foot: "1,299 contributions · private repositories", cta: "Open on the brain map",
+};
+
+// In the resume's order. Each card links to its repository; `live` adds the "Live demo" mark.
 const PROJECTS = [
   {
-    slug: "quickcart", kind: "Full stack · E-commerce", title: "QuickCart", repo: "quickcart-mern", live: true,
-    text: "MERN store with JWT roles, Stripe payments, Cloudinary media and an admin dashboard.",
-    tech: [["react", "React"], ["nodejs", "Node.js"], ["mongodb", "MongoDB"], ["stripe", "Stripe"]],
-  },
-  {
-    slug: "rn-wallet", kind: "Mobile · Full stack · ML", title: "RN-Wallet", repo: "RN-WALLET", live: false,
-    text: "Expense tracker on Express + PostgreSQL; an ML service sorts transactions into categories.",
-    tech: [["react", "React Native"], ["postgresql", "PostgreSQL"], ["redis", "Redis"], ["fastapi", "FastAPI"]],
+    slug: "portfolio", kind: "Full stack · My site", title: "Portfolio", repo: "Portfolio", live: true,
+    text: "React + Express + PostgreSQL, with live GitHub and LeetCode stats and a live brain map.",
+    tech: [["react", "React"], ["vite", "Vite"], ["nodejs", "Node.js"], ["postgresql", "PostgreSQL"]],
   },
   {
     slug: "hcp-crm", kind: "AI · Full stack", title: "AI-first HCP CRM", repo: "ai-first-hcp-interaction-crm", live: true,
@@ -38,9 +42,14 @@ const PROJECTS = [
     tech: [["langchain", "LangGraph"], ["fastapi", "FastAPI"], ["postgresql", "PostgreSQL"], ["react", "React"]],
   },
   {
-    slug: "portfolio", kind: "Full stack · My site", title: "Portfolio", repo: "Portfolio", live: true,
-    text: "React + Express + PostgreSQL, with live GitHub and LeetCode stats and a live brain map.",
-    tech: [["react", "React"], ["vite", "Vite"], ["nodejs", "Node.js"], ["postgresql", "PostgreSQL"]],
+    slug: "rn-wallet", kind: "Mobile · Full stack · ML", title: "RN-Wallet", repo: "RN-WALLET", live: false,
+    text: "Expense tracker on Express + PostgreSQL; an ML service sorts transactions into categories.",
+    tech: [["react", "React Native"], ["postgresql", "PostgreSQL"], ["redis", "Redis"], ["fastapi", "FastAPI"]],
+  },
+  {
+    slug: "quickcart", kind: "Full stack · E-commerce", title: "QuickCart", repo: "quickcart-mern", live: true,
+    text: "MERN store with JWT roles, Stripe payments, Cloudinary media and an admin dashboard.",
+    tech: [["react", "React"], ["nodejs", "Node.js"], ["mongodb", "MongoDB"], ["stripe", "Stripe"]],
   },
 ];
 
@@ -54,6 +63,12 @@ const STACK = [
 ];
 
 const LINKS = [
+  // Under the FileSure card
+  { slug: "ios", icon: "appstore", label: "iOS app" },
+  { slug: "android", icon: "googleplay", label: "Android app" },
+  { slug: "website", icon: "globe", label: "Website" },
+  { slug: "brainmap", icon: "brain", label: "Brain map" },
+  // Find me
   { slug: "portfolio", icon: "globe", label: "Portfolio" },
   { slug: "resume", icon: "file", label: "Resume" },
   { slug: "linkedin", icon: "linkedin", label: "LinkedIn" },
@@ -75,7 +90,8 @@ const luminance = (hex) => {
 function colorOf(name, t) {
   const icon = ICONS[name];
   if (!icon.color) return t.accent;
-  if (t.dark && luminance(icon.color) < 0.2) return icon.dark || t.title;
+  if (t.dark && icon.dark) return icon.dark;
+  if (t.dark && luminance(icon.color) < 0.2) return t.title;
   return icon.color;
 }
 const iconHtml = (name, t, cls = "ic") => `<span class="${cls}" style="color:${colorOf(name, t)}">${ICONS[name].svg}</span>`;
@@ -118,6 +134,33 @@ function projectPage(p, t) {
   <p>${p.text}</p>
   <div class="chips">${chips(p.tech, t)}</div>
   <div class="foot"><span>${iconHtml("github", t)}${p.repo}</span>${p.live ? `<span class="live"><i></i>Live demo</span>` : "<span></span>"}</div>
+</div></body></html>`;
+}
+
+const WORK_W = 900, WORK_H = 236;
+function workPage(t) {
+  const w = WORK;
+  return `<!doctype html><html><head><meta charset="utf-8"><style>${base(t, WORK_W, WORK_H)}
+  .card {
+    position: absolute; inset: 2px; display: grid; grid-template-rows: auto auto auto 1fr auto; gap: 9px;
+    padding: 16px 22px 14px; border-radius: 14px; border: 1px solid ${t.accent}; background: ${t.card};
+    box-shadow: inset 0 0 0 4px color-mix(in srgb, ${t.accent} 8%, transparent);
+  }
+  .top { display: flex; justify-content: space-between; align-items: center; }
+  .kind { font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: ${t.accent}; }
+  .go { font-size: 16px; color: ${t.accent}; }
+  h3 { font-size: 24px; font-weight: 700; letter-spacing: -.01em; color: ${t.title}; }
+  p { font-size: 14px; line-height: 1.45; color: ${t.text}; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; align-content: start; }
+  .foot { display: flex; justify-content: space-between; align-items: center; padding-top: 9px; border-top: 1px solid ${t.border}; font-size: 12.5px; color: ${t.text}; }
+  .foot span { display: inline-flex; align-items: center; gap: 6px; }
+  .cta { color: ${t.accent}; font-weight: 600; }
+</style></head><body><div class="card">
+  <div class="top"><span class="kind">${w.kind}</span>${iconHtml("external", t, "ic go")}</div>
+  <h3>${w.title}</h3>
+  <p>${w.text}</p>
+  <div class="chips">${chips(w.tech, t)}</div>
+  <div class="foot"><span>${iconHtml("github", t)}${w.foot}</span><span class="cta">${iconHtml("brain", t)}${w.cta}</span></div>
 </div></body></html>`;
 }
 
@@ -166,6 +209,7 @@ function shoot(name, html, width, height) {
 
 try {
   for (const [theme, t] of Object.entries(THEMES)) {
+    shoot(`work-filesure-${theme}`, workPage(t), WORK_W, WORK_H);
     for (const p of PROJECTS) shoot(`project-${p.slug}-${theme}`, projectPage(p, t), CARD_W, CARD_H);
     shoot(`stack-${theme}`, stackPage(t), STACK_W, STACK_H);
     for (const l of LINKS) shoot(`link-${l.slug}-${theme}`, linkPage(l, t), BTN_W, BTN_H);

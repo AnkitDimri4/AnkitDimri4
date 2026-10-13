@@ -22,15 +22,26 @@ I'm a software engineer who likes owning things end to end: the mobile app, the 
 
 > My 2026 work (April–October) was in FileSure's private repositories, so the code isn't public. The graph below includes those contributions, mirrored day by day.
 
+### Work
+
+<a href="https://portfolio-nine-orcin-33.vercel.app/brain-map/#filesure"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/work-filesure-dark.png"><img src="assets/cards/work-filesure-light.png" alt="FileSure, Software Engineer, April to October 2026: built FileSure's iOS and Android app from scratch, rebuilt company screening for 3.8M companies on ClickHouse, and led the backend's move from AWS to GCP; intern to Software Engineer in 3 months. React Native, Next.js, Node.js, MongoDB, ClickHouse, Google Cloud, AWS, Jenkins. 1,299 contributions in private repositories. Opens on the brain map." width="100%"></picture></a>
+
+<p>
+  <a href="https://apps.apple.com/in/app/filesure/id6759514259"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/link-ios-dark.png"><img src="assets/cards/link-ios-light.png" alt="FileSure on the App Store" width="150"></picture></a>
+  <a href="https://play.google.com/store/apps/details?id=in.filesure"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/link-android-dark.png"><img src="assets/cards/link-android-light.png" alt="FileSure on Google Play" width="150"></picture></a>
+  <a href="https://www.filesure.in"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/link-website-dark.png"><img src="assets/cards/link-website-light.png" alt="filesure.in" width="150"></picture></a>
+  <a href="https://portfolio-nine-orcin-33.vercel.app/brain-map/#filesure"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/link-brainmap-dark.png"><img src="assets/cards/link-brainmap-light.png" alt="My work on the brain map" width="150"></picture></a>
+</p>
+
 ### Projects
 
 <p>
-  <a href="https://github.com/AnkitDimri4/quickcart-mern"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/project-quickcart-dark.png"><img src="assets/cards/project-quickcart-light.png" alt="QuickCart: MERN store with JWT roles, Stripe payments, Cloudinary media and an admin dashboard. React, Node.js, MongoDB, Stripe. Live demo." width="49%"></picture></a>
-  <a href="https://github.com/AnkitDimri4/RN-WALLET"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/project-rn-wallet-dark.png"><img src="assets/cards/project-rn-wallet-light.png" alt="RN-Wallet: React Native expense tracker on Express and PostgreSQL; an ML service sorts transactions into categories. React Native, PostgreSQL, Redis, FastAPI." width="49%"></picture></a>
+  <a href="https://github.com/AnkitDimri4/Portfolio"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/project-portfolio-dark.png"><img src="assets/cards/project-portfolio-light.png" alt="Portfolio: React, Express and PostgreSQL, with live GitHub and LeetCode stats and a live brain map. React, Vite, Node.js, PostgreSQL. Live demo." width="49%"></picture></a>
+  <a href="https://github.com/AnkitDimri4/ai-first-hcp-interaction-crm"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/project-hcp-crm-dark.png"><img src="assets/cards/project-hcp-crm-light.png" alt="AI-first HCP CRM: reps log doctor visits in plain English; a LangGraph agent with 5 tools fills in the record. LangGraph, FastAPI, PostgreSQL, React. Live demo." width="49%"></picture></a>
 </p>
 <p>
-  <a href="https://github.com/AnkitDimri4/ai-first-hcp-interaction-crm"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/project-hcp-crm-dark.png"><img src="assets/cards/project-hcp-crm-light.png" alt="AI-first HCP CRM: reps log doctor visits in plain English; a LangGraph agent with 5 tools fills in the record. LangGraph, FastAPI, PostgreSQL, React. Live demo." width="49%"></picture></a>
-  <a href="https://github.com/AnkitDimri4/Portfolio"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/project-portfolio-dark.png"><img src="assets/cards/project-portfolio-light.png" alt="Portfolio: React, Express and PostgreSQL, with live GitHub and LeetCode stats and a live brain map. React, Vite, Node.js, PostgreSQL. Live demo." width="49%"></picture></a>
+  <a href="https://github.com/AnkitDimri4/RN-WALLET"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/project-rn-wallet-dark.png"><img src="assets/cards/project-rn-wallet-light.png" alt="RN-Wallet: React Native expense tracker on Express and PostgreSQL; an ML service sorts transactions into categories. React Native, PostgreSQL, Redis, FastAPI." width="49%"></picture></a>
+  <a href="https://github.com/AnkitDimri4/quickcart-mern"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/project-quickcart-dark.png"><img src="assets/cards/project-quickcart-light.png" alt="QuickCart: MERN store with JWT roles, Stripe payments, Cloudinary media and an admin dashboard. React, Node.js, MongoDB, Stripe. Live demo." width="49%"></picture></a>
 </p>
 
 ### Tech I use
