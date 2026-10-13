@@ -1,0 +1,4 @@
+# Text is stored with LF on every machine (Windows included); images and fonts are left alone.
+* text=auto eol=lf
+*.png binary
+*.woff2 binary

@@ -7,16 +7,38 @@
 // The top card draws my FileSure contribution graph from assets/work-contributions.json
 // (date → contributions, copied from my work account's public graph).
 //
-// To update: edit CARDS below, run this, commit the PNGs. Needs Google Chrome
-// (set CHROME_PATH if it isn't in /Applications).
+// To update: edit CARDS below, run this, commit the PNGs. Needs Chrome or Edge (found on macOS,
+// Windows and Linux; CHROME_PATH overrides).
 import { execFileSync } from "node:child_process";
-import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const CHROME = process.env.CHROME_PATH || "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
+// Chrome on macOS, Windows or Linux, or Edge (same engine, same flags); CHROME_PATH overrides.
+function findChrome() {
+  if (process.env.CHROME_PATH) return process.env.CHROME_PATH;
+  const win = [process.env.PROGRAMFILES, process.env["PROGRAMFILES(X86)"], process.env.LOCALAPPDATA].filter(Boolean);
+  const candidates =
+    {
+      darwin: [
+        "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+        "/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge",
+      ],
+      win32: [
+        ...win.map((dir) => path.join(dir, "Google", "Chrome", "Application", "chrome.exe")),
+        ...win.map((dir) => path.join(dir, "Microsoft", "Edge", "Application", "msedge.exe")),
+      ],
+      linux: ["/usr/bin/google-chrome", "/usr/bin/google-chrome-stable", "/usr/bin/chromium", "/usr/bin/chromium-browser"],
+    }[process.platform] ?? [];
+  return candidates.find((candidate) => existsSync(candidate)) ?? candidates[0] ?? "google-chrome";
+}
+const CHROME = findChrome();
+if (!existsSync(CHROME)) {
+  console.error(`Chrome or Edge not found ("${CHROME}"); install one, or set CHROME_PATH.`);
+  process.exit(1);
+}
 const W = 1200;
 const H = 980;
 const CARD_W = 360;
