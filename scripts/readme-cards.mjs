@@ -90,7 +90,8 @@ const LINKS = [
   { slug: "android", icon: "googleplay", label: "Android app" },
   { slug: "website", icon: "globe", label: "Website" },
   { slug: "brainmap", icon: "brain", label: "Brain map" },
-  // Find me
+  // Find me (`w` widens a button for a longer label)
+  { slug: "schedule", icon: "calendar", label: "Schedule a call", w: 196 },
   { slug: "portfolio", icon: "globe", label: "Portfolio" },
   { slug: "resume", icon: "file", label: "Resume" },
   { slug: "linkedin", icon: "linkedin", label: "LinkedIn" },
@@ -201,7 +202,7 @@ function stackPage(t) {
 
 const BTN_W = 164, BTN_H = 48;
 function linkPage(l, t) {
-  return `<!doctype html><html><head><meta charset="utf-8"><style>${base(t, BTN_W, BTN_H)}
+  return `<!doctype html><html><head><meta charset="utf-8"><style>${base(t, l.w ?? BTN_W, BTN_H)}
   .btn {
     position: absolute; inset: 2px; display: flex; align-items: center; justify-content: center; gap: 9px;
     border-radius: 999px; border: 1.5px solid ${t.border}; background: ${t.card};
@@ -234,7 +235,7 @@ try {
     shoot(`work-filesure-${theme}`, workPage(t), WORK_W, WORK_H);
     for (const p of PROJECTS) shoot(`project-${p.slug}-${theme}`, projectPage(p, t), CARD_W, CARD_H);
     shoot(`stack-${theme}`, stackPage(t), STACK_W, STACK_H);
-    for (const l of LINKS) shoot(`link-${l.slug}-${theme}`, linkPage(l, t), BTN_W, BTN_H);
+    for (const l of LINKS) shoot(`link-${l.slug}-${theme}`, linkPage(l, t), l.w ?? BTN_W, BTN_H);
   }
 } finally {
   rmSync(work, { recursive: true, force: true });
