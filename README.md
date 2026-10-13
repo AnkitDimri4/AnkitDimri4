@@ -11,6 +11,10 @@ I'm a software engineer who likes owning things end to end: the mobile app, the 
   <img src="assets/brain-map-light.png" alt="Brain map of Ankit Dimri's work. FileSure 2026: intern to Software Engineer in 3 months, ran the tech with the founder, 21 runbooks. Mobile: iOS and Android apps from scratch, Google Play 1.0.7 to 1.0.13, App Store 1.0.9 to 1.0.13, 80+ over-the-air updates. Search and Data: 3.8M-company screening in 6 days, 60 s timeouts to seconds, 146 sub-sectors. Cloud and DevOps: AWS to GCP, gated Jenkins CI/CD, search for 3.67M companies and 8.7M directors. Web and APIs: Next.js, React, Node.js, name to CIN/DIN lookup API. Mentoring: 25,000+ learners over 3 years at Tutedude." width="100%">
 </picture>
 
+<p align="center">
+  <a href="https://portfolio-nine-orcin-33.vercel.app/brain-map/"><img src="https://img.shields.io/badge/Open_the_live_brain_map-light_%2F_dark_toggle-4d6378?style=for-the-badge" alt="Open the live brain map, with a light/dark toggle"></a>
+</p>
+
 > Most of my 2026 work lives in FileSure's private repositories, so it doesn't show on the contribution graph below.
 
 ### Projects
