@@ -2,13 +2,11 @@
   <img src="assets/banner.png" alt="Ankit Dimri, Software Engineer: iOS and Android apps from scratch, 3.8M-company search on ClickHouse, AWS to GCP with Jenkins CI/CD" width="100%">
 </a>
 
-### Hi, I'm Ankit 👋
-
-I'm a software engineer who likes owning things end to end: the mobile app, the website, the APIs behind them and the cloud they run on. Here's the map of what I've built.
+<a href="https://portfolio-nine-orcin-33.vercel.app/"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/intro-dark.png"><img src="assets/cards/intro-light.png" alt="Hi, I'm Ankit 👋 Software Engineer in Dehradun, India, open to new roles. I like owning things end to end: the mobile app, the website, the APIs behind them and the cloud they run on. Here's the map of what I've built. iOS and Android apps, websites, APIs, cloud and DevOps, machine learning." width="100%"></picture></a>
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="assets/brain-map-dark.png">
-  <img src="assets/brain-map-light.png" alt="Brain map of Ankit Dimri's work. GitHub activity at FileSure: 1,299 contributions in 83 active days from 25 April to 31 October 2026, busiest day 77, mirrored to my main graph. FileSure 2026: intern to Software Engineer in 3 months, ran the tech with the founder, 21 runbooks. Mobile: iOS and Android apps from scratch, Google Play 1.0.7 to 1.0.13, App Store 1.0.9 to 1.0.13, 80+ over-the-air updates. Search and Data: 3.8M-company screening in 6 days, 60 s timeouts to seconds, 146 sub-sectors. Cloud and DevOps: AWS to GCP, gated Jenkins CI/CD, search for 3.67M companies and 8.7M directors. Web and APIs: Next.js, React, Node.js, developer API with name to CIN/DIN lookup. Mentoring: 25,000+ learners over 3+ years, part-time, at Tutedude." width="100%">
+  <img src="assets/brain-map-light.png" alt="Brain map of Ankit Dimri's work. GitHub activity at FileSure: 1,299 contributions in 83 active days; Busiest day 77 · mirrored to my main graph. FileSure · 2026: Intern → Software Engineer in 3 months; Ran the company's tech with the founder; Releases, incidents and 21 runbooks. Search &amp; Data: 3.8M-company screening rebuilt in 6 days; 60 s timeouts → answers in seconds; 146 sub-sectors, measured precision. Mentoring: 25,000+ learners helped; 3+ years at Tutedude, part-time; Full-stack · DSA · ML · React Native. Mobile: iOS &amp; Android apps built from scratch; Google Play 1.0.7 → 1.0.13; App Store 1.0.9 → 1.0.13; 80+ over-the-air updates. Cloud &amp; DevOps: Led the backend move AWS → GCP; Gated Jenkins CI/CD with rollbacks; Search for 3.67M companies, 8.7M directors. Web &amp; APIs: Next.js · React · Node.js · Express; Developer API: name → CIN/DIN lookup; MongoDB · PostgreSQL · ClickHouse. Side projects: QuickCart · RN-Wallet; AI-first HCP CRM · Portfolio; 1,115 public commits · 691 LeetCode solved." width="100%">
 </picture>
 
 <p align="center">
