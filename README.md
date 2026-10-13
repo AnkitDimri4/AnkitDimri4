@@ -25,10 +25,10 @@
 <a href="https://portfolio-nine-orcin-33.vercel.app/brain-map/#filesure"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/work-filesure-dark.png"><img src="assets/cards/work-filesure-light.png" alt="FileSure, Software Engineer, April to October 2026: built FileSure's iOS and Android app from scratch, rebuilt company screening for 3.8M companies on ClickHouse, and led the backend's move from AWS to GCP; intern to Software Engineer in 3 months. React Native, Next.js, Node.js, MongoDB, ClickHouse, Google Cloud, AWS, Jenkins. 1,299 contributions in private repositories. Opens on the brain map." width="100%"></picture></a>
 
 <p>
-  <a href="https://apps.apple.com/in/app/filesure/id6759514259"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/link-ios-dark.png"><img src="assets/cards/link-ios-light.png" alt="FileSure on the App Store" width="150"></picture></a>
-  <a href="https://play.google.com/store/apps/details?id=in.filesure"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/link-android-dark.png"><img src="assets/cards/link-android-light.png" alt="FileSure on Google Play" width="150"></picture></a>
-  <a href="https://www.filesure.in"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/link-website-dark.png"><img src="assets/cards/link-website-light.png" alt="filesure.in" width="150"></picture></a>
-  <a href="https://portfolio-nine-orcin-33.vercel.app/brain-map/#filesure"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/link-brainmap-dark.png"><img src="assets/cards/link-brainmap-light.png" alt="My work on the brain map" width="150"></picture></a>
+  <a href="https://apps.apple.com/in/app/filesure/id6759514259"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/link-ios-dark.png"><img src="assets/cards/link-ios-light.png" alt="FileSure on the App Store" width="128"></picture></a>
+  <a href="https://play.google.com/store/apps/details?id=in.filesure"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/link-android-dark.png"><img src="assets/cards/link-android-light.png" alt="FileSure on Google Play" width="128"></picture></a>
+  <a href="https://www.filesure.in"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/link-website-dark.png"><img src="assets/cards/link-website-light.png" alt="filesure.in" width="128"></picture></a>
+  <a href="https://portfolio-nine-orcin-33.vercel.app/brain-map/#filesure"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/link-brainmap-dark.png"><img src="assets/cards/link-brainmap-light.png" alt="My work on the brain map" width="128"></picture></a>
 </p>
 
 ### Projects
@@ -49,9 +49,10 @@
 ### Find me
 
 <p>
-  <a href="https://portfolio-nine-orcin-33.vercel.app/"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/link-portfolio-dark.png"><img src="assets/cards/link-portfolio-light.png" alt="Portfolio" width="150"></picture></a>
-  <a href="https://portfolio-nine-orcin-33.vercel.app/resume"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/link-resume-dark.png"><img src="assets/cards/link-resume-light.png" alt="Resume" width="150"></picture></a>
-  <a href="https://www.linkedin.com/in/ankit-dimri-a6ab98263"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/link-linkedin-dark.png"><img src="assets/cards/link-linkedin-light.png" alt="LinkedIn" width="150"></picture></a>
-  <a href="https://leetcode.com/u/user4612MW/"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/link-leetcode-dark.png"><img src="assets/cards/link-leetcode-light.png" alt="LeetCode" width="150"></picture></a>
-  <a href="mailto:dimri.ankitdimri@gmail.com"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/link-email-dark.png"><img src="assets/cards/link-email-light.png" alt="Email dimri.ankitdimri@gmail.com" width="150"></picture></a>
+  <a href="https://portfolio-nine-orcin-33.vercel.app/#schedule"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/link-schedule-dark.png"><img src="assets/cards/link-schedule-light.png" alt="Schedule a 30-minute call (Google Meet)" width="153"></picture></a>
+  <a href="https://portfolio-nine-orcin-33.vercel.app/"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/link-portfolio-dark.png"><img src="assets/cards/link-portfolio-light.png" alt="Portfolio" width="128"></picture></a>
+  <a href="https://portfolio-nine-orcin-33.vercel.app/resume"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/link-resume-dark.png"><img src="assets/cards/link-resume-light.png" alt="Resume" width="128"></picture></a>
+  <a href="https://www.linkedin.com/in/ankit-dimri-a6ab98263"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/link-linkedin-dark.png"><img src="assets/cards/link-linkedin-light.png" alt="LinkedIn" width="128"></picture></a>
+  <a href="https://leetcode.com/u/user4612MW/"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/link-leetcode-dark.png"><img src="assets/cards/link-leetcode-light.png" alt="LeetCode" width="128"></picture></a>
+  <a href="mailto:dimri.ankitdimri@gmail.com"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/link-email-dark.png"><img src="assets/cards/link-email-light.png" alt="Email dimri.ankitdimri@gmail.com" width="128"></picture></a>
 </p>
