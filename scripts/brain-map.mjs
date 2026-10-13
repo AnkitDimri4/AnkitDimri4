@@ -2,7 +2,8 @@
 //
 // Draws the "brain map" on the profile README: the brain-and-circuit logo in the middle, with
 // circuit lines out to a card for each area of work. Writes assets/brain-map-light.png and
-// assets/brain-map-dark.png (GitHub shows the one that matches the viewer's theme).
+// assets/brain-map-dark.png (GitHub shows the one that matches the viewer's theme), plus the
+// README's "Explore the live brain map" button, assets/live-button-light.png and -dark.png.
 //
 // To update: edit CARDS below, run this, commit the two PNGs. Needs Google Chrome
 // (set CHROME_PATH if it isn't in /Applications).
@@ -148,8 +149,12 @@ function page(t) {
     <strong>Ankit Dimri</strong><span>Software Engineer</span>
   </div>
 </div>
-<script>
-  // Keep the logo's dark strokes, drop its background, and recolour it for this theme.
+${logoScript(t)}</body></html>`;
+}
+
+// Keep the logo's dark strokes, drop its background, and recolour it for this theme.
+function logoScript(t) {
+  return `<script>
   const img = new Image();
   img.onload = () => {
     const c = document.getElementById("logo"), ctx = c.getContext("2d");
@@ -166,21 +171,49 @@ function page(t) {
     ctx.putImageData(d, 0, 0);
   };
   img.src = "${logo}";
-</script></body></html>`;
+</script>`;
+}
+
+// The README's link to the live page: a pill button in the same style, on a transparent background.
+const BTN_W = 460;
+const BTN_H = 66;
+
+function buttonPage(t) {
+  return `<!doctype html><html><head><meta charset="utf-8"><title>Live brain map button</title><style>
+  @font-face { font-family: "Geist"; src: url("${font}") format("woff2"); font-weight: 100 900; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: ${BTN_W}px; height: ${BTN_H}px; overflow: hidden; background: transparent; }
+  .btn {
+    position: absolute; inset: 3px; display: flex; align-items: center; justify-content: center; gap: 12px;
+    border-radius: 999px; border: 1.5px solid ${t.accent}; background: ${t.card};
+    font-family: "Geist", -apple-system, sans-serif; font-size: 19px; font-weight: 600; color: ${t.title};
+  }
+  .btn canvas { width: 52px; height: 36px; }
+  .btn span { color: ${t.accent}; font-size: 21px; margin-left: -2px; }
+</style></head><body>
+  <div class="btn"><canvas id="logo" width="213" height="149"></canvas>Explore the live brain map<span>↗</span></div>
+${logoScript(t)}</body></html>`;
 }
 
 const work = mkdtempSync(path.join(tmpdir(), "brain-map-"));
+function shoot(name, html, width, height, transparent) {
+  const file = path.join(work, `${name}.html`);
+  writeFileSync(file, html);
+  // A fresh Chrome profile per image: reusing one can hang while the previous Chrome is still closing.
+  const profile = mkdtempSync(path.join(work, "profile-"));
+  execFileSync(CHROME, [
+    "--headless=new", "--disable-gpu", "--no-first-run", `--user-data-dir=${profile}`,
+    "--hide-scrollbars", "--force-device-scale-factor=2", `--window-size=${width},${height}`,
+    ...(transparent ? ["--default-background-color=00000000"] : []),
+    "--virtual-time-budget=4000", `--screenshot=${path.join(root, "assets", `${name}.png`)}`, pathToFileURL(file).href,
+  ], { stdio: "pipe", timeout: 60000 });
+  console.log(`wrote assets/${name}.png`);
+}
+
 try {
   for (const [name, theme] of Object.entries(THEMES)) {
-    const html = path.join(work, `${name}.html`);
-    const png = path.join(root, "assets", `brain-map-${name}.png`);
-    writeFileSync(html, page(theme));
-    execFileSync(CHROME, [
-      "--headless=new", "--disable-gpu", "--no-first-run", `--user-data-dir=${path.join(work, "profile")}`,
-      "--hide-scrollbars", "--force-device-scale-factor=2", `--window-size=${W},${H}`,
-      "--virtual-time-budget=4000", `--screenshot=${png}`, pathToFileURL(html).href,
-    ], { stdio: "pipe" });
-    console.log(`wrote assets/brain-map-${name}.png`);
+    shoot(`brain-map-${name}`, page(theme), W, H, false);
+    shoot(`live-button-${name}`, buttonPage(theme), BTN_W, BTN_H, true);
   }
 } finally {
   rmSync(work, { recursive: true, force: true });

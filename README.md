@@ -12,7 +12,12 @@ I'm a software engineer who likes owning things end to end: the mobile app, the 
 </picture>
 
 <p align="center">
-  <a href="https://portfolio-nine-orcin-33.vercel.app/brain-map/"><img src="https://img.shields.io/badge/Open_the_live_brain_map-light_%2F_dark_toggle-4d6378?style=for-the-badge" alt="Open the live brain map, with a light/dark toggle"></a>
+  <a href="https://portfolio-nine-orcin-33.vercel.app/brain-map/">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="assets/live-button-dark.png">
+      <img src="assets/live-button-light.png" alt="Explore the live brain map" width="340">
+    </picture>
+  </a>
 </p>
 
 > Most of my 2026 work lives in FileSure's private repositories, so it doesn't show on the contribution graph below.
