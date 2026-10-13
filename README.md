@@ -4,16 +4,12 @@
 
 ### Hi, I'm Ankit 👋
 
-I'm a software engineer who likes owning things end to end: the mobile app, the website, the APIs behind them and the cloud they run on.
+I'm a software engineer who likes owning things end to end: the mobile app, the website, the APIs behind them and the cloud they run on. Here's the map of what I've built.
 
-At **FileSure** I joined as a Tech Support & Operations intern, was promoted to full-time **Software Engineer** three months into a six-month internship, and from July 2026 ran the company's tech with the founder.
-
-### What I've built
-
-- 📱 **FileSure's Android and iOS apps, from scratch.** Live on both stores, with 80+ over-the-air updates.
-- 🔎 **Company search for 3.8M companies, rebuilt in six days.** Filters went from 60-second timeouts to answers in seconds, on ClickHouse.
-- ☁️ **AWS → GCP.** Led the backend's move behind a gated Jenkins CI/CD pipeline, and set up search for 3.67M companies and 8.7M directors with zero failures.
-- 🎓 **25,000+ learners** helped over three years as a technical mentor at Tutedude.
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/brain-map-dark.png">
+  <img src="assets/brain-map-light.png" alt="Brain map of Ankit Dimri's work. FileSure 2026: intern to Software Engineer in 3 months, ran the tech with the founder, 21 runbooks. Mobile: iOS and Android apps from scratch, Google Play 1.0.7 to 1.0.13, App Store 1.0.9 to 1.0.13, 80+ over-the-air updates. Search and Data: 3.8M-company screening in 6 days, 60 s timeouts to seconds, 146 sub-sectors. Cloud and DevOps: AWS to GCP, gated Jenkins CI/CD, search for 3.67M companies and 8.7M directors. Web and APIs: Next.js, React, Node.js, name to CIN/DIN lookup API. Mentoring: 25,000+ learners over 3 years at Tutedude." width="100%">
+</picture>
 
 > Most of my 2026 work lives in FileSure's private repositories, so it doesn't show on the contribution graph below.
 
