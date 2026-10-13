@@ -100,7 +100,12 @@ const logo = `data:image/png;base64,${readFileSync(path.join(root, "assets", "lo
 const font = pathToFileURL(path.join(root, "assets", "fonts", "geist.woff2")).href;
 const contributions = JSON.parse(readFileSync(path.join(root, "assets", "work-contributions.json"), "utf8"));
 
+// "25 Apr" from "2026-04-25".
+const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const dayLabel = (iso) => `${Number(iso.slice(8, 10))} ${MONTHS[Number(iso.slice(5, 7)) - 1]}`;
+
 // The contribution graph: a column per week (Sunday on top), shaded by quartile of the active days.
+// It runs from my first contribution to my last day at FileSure (31 Oct 2026).
 function heatmap(t) {
   const days = Object.keys(contributions).sort();
   const active = Object.values(contributions).filter(Boolean).sort((a, b) => a - b);
@@ -118,7 +123,7 @@ function heatmap(t) {
   const cols = Math.ceil(days.length / 7);
   const scale = t.heat.map((c) => `<i style="background:${c}"></i>`).join("");
   return `<svg class="heat" viewBox="0 0 ${cols * P - (P - C)} ${TOP + 7 * P - (P - C)}">${labels}${cells}</svg>
-    <p class="when"><span>25 Apr – 12 Oct 2026</span><span class="scale">Less ${scale} More</span></p>`;
+    <p class="when"><span>${dayLabel(days.find((d) => contributions[d]))} – ${dayLabel(days.at(-1))} ${days.at(-1).slice(0, 4)}</span><span class="scale">Less ${scale} More</span></p>`;
 }
 
 // Where each line meets its card: the side card's title row, the bottom card's top edge, or
