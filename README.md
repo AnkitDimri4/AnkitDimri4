@@ -24,20 +24,25 @@ I'm a software engineer who likes owning things end to end: the mobile app, the 
 
 ### Projects
 
-| | |
-|---|---|
-| **[QuickCart](https://github.com/AnkitDimri4/quickcart-mern)** · [live](https://quickcart-mern.vercel.app/)<br>MERN e-commerce with JWT auth, Stripe payments, Cloudinary media and an admin dashboard. | **[RN-Wallet](https://github.com/AnkitDimri4/RN-WALLET)**<br>React Native expense tracker on Express + PostgreSQL, with an ML service that sorts transactions into categories. |
-| **[AI-first HCP CRM](https://github.com/AnkitDimri4/ai-first-hcp-interaction-crm)** · [live](https://ai-first-hcp-interaction-crm.vercel.app/)<br>Field reps log doctor visits in plain English; a LangGraph agent turns them into structured records. | **[Portfolio](https://github.com/AnkitDimri4/Portfolio)** · [live](https://portfolio-nine-orcin-33.vercel.app/)<br>React + Node/Express + PostgreSQL, with live GitHub & LeetCode stats and a resume generator. |
+<p>
+  <a href="https://github.com/AnkitDimri4/quickcart-mern"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/project-quickcart-dark.png"><img src="assets/cards/project-quickcart-light.png" alt="QuickCart: MERN store with JWT roles, Stripe payments, Cloudinary media and an admin dashboard. React, Node.js, MongoDB, Stripe. Live demo." width="49%"></picture></a>
+  <a href="https://github.com/AnkitDimri4/RN-WALLET"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/project-rn-wallet-dark.png"><img src="assets/cards/project-rn-wallet-light.png" alt="RN-Wallet: React Native expense tracker on Express and PostgreSQL; an ML service sorts transactions into categories. React Native, PostgreSQL, Redis, FastAPI." width="49%"></picture></a>
+</p>
+<p>
+  <a href="https://github.com/AnkitDimri4/ai-first-hcp-interaction-crm"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/project-hcp-crm-dark.png"><img src="assets/cards/project-hcp-crm-light.png" alt="AI-first HCP CRM: reps log doctor visits in plain English; a LangGraph agent with 5 tools fills in the record. LangGraph, FastAPI, PostgreSQL, React. Live demo." width="49%"></picture></a>
+  <a href="https://github.com/AnkitDimri4/Portfolio"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/project-portfolio-dark.png"><img src="assets/cards/project-portfolio-light.png" alt="Portfolio: React, Express and PostgreSQL, with live GitHub and LeetCode stats and a live brain map. React, Vite, Node.js, PostgreSQL. Live demo." width="49%"></picture></a>
+</p>
 
 ### Tech I use
 
-<img src="https://skillicons.dev/icons?i=react,nextjs,nodejs,express,ts,js,mongodb,postgres,redis,py,cpp,gcp,aws,cloudflare,docker,kubernetes,jenkins,git,vercel,sentry&perline=10" alt="React, Next.js, Node.js, Express, TypeScript, JavaScript, MongoDB, PostgreSQL, Redis, Python, C++, GCP, AWS, Cloudflare, Docker, Kubernetes, Jenkins, Git, Vercel, Sentry">
-
-<img src="https://img.shields.io/badge/React_Native-Expo-000020?logo=expo&logoColor=white" alt="React Native (Expo)"> <img src="https://img.shields.io/badge/ClickHouse-FFCC01?logo=clickhouse&logoColor=black" alt="ClickHouse">
+<a href="https://portfolio-nine-orcin-33.vercel.app/#stack"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/stack-dark.png"><img src="assets/cards/stack-light.png" alt="Tech I use. Mobile: React Native, Expo, iOS, Android. Frontend: React, Next.js, TypeScript, JavaScript, Redux, Tailwind. Backend and APIs: Node.js, Express, FastAPI, Django, REST APIs. Data: MongoDB, PostgreSQL, ClickHouse, Redis. Cloud and DevOps: Google Cloud, AWS, Cloudflare, Docker, Kubernetes, Jenkins. ML and tools: Python, scikit-learn, Pandas, Git, Sentry, Claude Code." width="100%"></picture></a>
 
 ### Find me
 
-[![Portfolio](https://img.shields.io/badge/Portfolio-ff6b35?style=for-the-badge&logo=vercel&logoColor=white)](https://portfolio-nine-orcin-33.vercel.app/)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logoColor=white)](https://www.linkedin.com/in/ankit-dimri-a6ab98263)
-[![LeetCode](https://img.shields.io/badge/LeetCode-FFA116?style=for-the-badge&logo=leetcode&logoColor=black)](https://leetcode.com/u/user4612MW/)
-[![Email](https://img.shields.io/badge/Email-dimri.ankitdimri%40gmail.com-555555?style=for-the-badge&logo=gmail&logoColor=white)](mailto:dimri.ankitdimri@gmail.com)
+<p>
+  <a href="https://portfolio-nine-orcin-33.vercel.app/"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/link-portfolio-dark.png"><img src="assets/cards/link-portfolio-light.png" alt="Portfolio" width="150"></picture></a>
+  <a href="https://portfolio-nine-orcin-33.vercel.app/resume"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/link-resume-dark.png"><img src="assets/cards/link-resume-light.png" alt="Resume" width="150"></picture></a>
+  <a href="https://www.linkedin.com/in/ankit-dimri-a6ab98263"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/link-linkedin-dark.png"><img src="assets/cards/link-linkedin-light.png" alt="LinkedIn" width="150"></picture></a>
+  <a href="https://leetcode.com/u/user4612MW/"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/link-leetcode-dark.png"><img src="assets/cards/link-leetcode-light.png" alt="LeetCode" width="150"></picture></a>
+  <a href="mailto:dimri.ankitdimri@gmail.com"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/link-email-dark.png"><img src="assets/cards/link-email-light.png" alt="Email dimri.ankitdimri@gmail.com" width="150"></picture></a>
+</p>

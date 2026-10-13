@@ -1,0 +1,175 @@
+// node scripts/readme-cards.mjs
+//
+// Draws the README's project cards, the tech stack and the "Find me" buttons in the brain map's
+// style, light and dark (GitHub shows the one that matches the viewer's theme):
+//   assets/cards/project-<slug>-{light,dark}.png
+//   assets/cards/stack-{light,dark}.png
+//   assets/cards/link-<slug>-{light,dark}.png
+//
+// To update: edit PROJECTS, STACK or LINKS below, run this, commit the PNGs. Icons come from
+// assets/cards/icons.json (Simple Icons, CC0, and Feather/Lucide/Tabler, MIT/ISC, with brand
+// colours). Needs Google Chrome (set CHROME_PATH if it isn't in /Applications).
+import { execFileSync } from "node:child_process";
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import path from "node:path";
+import { fileURLToPath, pathToFileURL } from "node:url";
+
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const CHROME = process.env.CHROME_PATH || "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
+const font = pathToFileURL(path.join(root, "assets", "fonts", "geist.woff2")).href;
+const ICONS = JSON.parse(readFileSync(path.join(root, "assets", "cards", "icons.json"), "utf8"));
+
+// Each card links to its repository; `live` adds the "Live demo" mark.
+const PROJECTS = [
+  {
+    slug: "quickcart", kind: "Full stack · E-commerce", title: "QuickCart", repo: "quickcart-mern", live: true,
+    text: "MERN store with JWT roles, Stripe payments, Cloudinary media and an admin dashboard.",
+    tech: [["react", "React"], ["nodejs", "Node.js"], ["mongodb", "MongoDB"], ["stripe", "Stripe"]],
+  },
+  {
+    slug: "rn-wallet", kind: "Mobile · Full stack · ML", title: "RN-Wallet", repo: "RN-WALLET", live: false,
+    text: "Expense tracker on Express + PostgreSQL; an ML service sorts transactions into categories.",
+    tech: [["react", "React Native"], ["postgresql", "PostgreSQL"], ["redis", "Redis"], ["fastapi", "FastAPI"]],
+  },
+  {
+    slug: "hcp-crm", kind: "AI · Full stack", title: "AI-first HCP CRM", repo: "ai-first-hcp-interaction-crm", live: true,
+    text: "Reps log doctor visits in plain English; a LangGraph agent with 5 tools fills in the record.",
+    tech: [["langchain", "LangGraph"], ["fastapi", "FastAPI"], ["postgresql", "PostgreSQL"], ["react", "React"]],
+  },
+  {
+    slug: "portfolio", kind: "Full stack · My site", title: "Portfolio", repo: "Portfolio", live: true,
+    text: "React + Express + PostgreSQL, with live GitHub and LeetCode stats and a live brain map.",
+    tech: [["react", "React"], ["vite", "Vite"], ["nodejs", "Node.js"], ["postgresql", "PostgreSQL"]],
+  },
+];
+
+const STACK = [
+  { title: "Mobile", icon: "mobile", items: [["react", "React Native"], ["expo", "Expo"], ["apple", "iOS"], ["android", "Android"]] },
+  { title: "Frontend", icon: "layout", items: [["react", "React"], ["nextjs", "Next.js"], ["typescript", "TypeScript"], ["javascript", "JavaScript"], ["redux", "Redux"], ["tailwind", "Tailwind"]] },
+  { title: "Backend & APIs", icon: "server", items: [["nodejs", "Node.js"], ["express", "Express"], ["fastapi", "FastAPI"], ["django", "Django"], ["api", "REST APIs"]] },
+  { title: "Data", icon: "database", items: [["mongodb", "MongoDB"], ["postgresql", "PostgreSQL"], ["clickhouse", "ClickHouse"], ["redis", "Redis"]] },
+  { title: "Cloud & DevOps", icon: "cloud", items: [["gcp", "Google Cloud"], ["aws", "AWS"], ["cloudflare", "Cloudflare"], ["docker", "Docker"], ["kubernetes", "Kubernetes"], ["jenkins", "Jenkins"]] },
+  { title: "ML & Tools", icon: "sparkles", items: [["python", "Python"], ["scikitlearn", "scikit-learn"], ["pandas", "Pandas"], ["git", "Git"], ["sentry", "Sentry"], ["claude", "Claude Code"]] },
+];
+
+const LINKS = [
+  { slug: "portfolio", icon: "globe", label: "Portfolio" },
+  { slug: "resume", icon: "file", label: "Resume" },
+  { slug: "linkedin", icon: "linkedin", label: "LinkedIn" },
+  { slug: "leetcode", icon: "leetcode", label: "LeetCode" },
+  { slug: "email", icon: "gmail", label: "Email" },
+];
+
+// The brain map's palette.
+const THEMES = {
+  light: { card: "#f6f8fa", chip: "#ffffff", border: "#d0d7de", title: "#1f2328", text: "#59636e", accent: "#4d6378", dark: false },
+  dark: { card: "#161b22", chip: "#0d1117", border: "#30363d", title: "#e6edf3", text: "#9198a1", accent: "#7d9ab5", dark: true },
+};
+
+// A brand colour that's too dark for the dark theme uses its lighter variant, or the text colour.
+const luminance = (hex) => {
+  const [r, g, b] = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16) / 255);
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+};
+function colorOf(name, t) {
+  const icon = ICONS[name];
+  if (!icon.color) return t.accent;
+  if (t.dark && luminance(icon.color) < 0.2) return icon.dark || t.title;
+  return icon.color;
+}
+const iconHtml = (name, t, cls = "ic") => `<span class="${cls}" style="color:${colorOf(name, t)}">${ICONS[name].svg}</span>`;
+const chips = (items, t) => items.map(([name, label]) => `<span class="chip">${iconHtml(name, t)}${label}</span>`).join("");
+
+const base = (t, w, h) => `
+  @font-face { font-family: "Geist"; src: url("${font}") format("woff2"); font-weight: 100 900; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: ${w}px; height: ${h}px; overflow: hidden; background: transparent; font-family: "Geist", -apple-system, sans-serif; }
+  /* Headless Chrome keeps a minimum window width, so size everything to the body, not the window. */
+  body { position: relative; }
+  .ic { display: inline-flex; flex: none; }
+  .ic svg { width: 1em; height: 1em; display: block; }
+  .chip {
+    display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px;
+    border: 1px solid ${t.border}; background: ${t.chip}; color: ${t.title}; font-size: 12.5px; font-weight: 500; white-space: nowrap;
+  }
+  .chip .ic { font-size: 14px; }`;
+
+const CARD_W = 440, CARD_H = 254;
+function projectPage(p, t) {
+  return `<!doctype html><html><head><meta charset="utf-8"><style>${base(t, CARD_W, CARD_H)}
+  .card {
+    position: absolute; inset: 2px; display: grid; grid-template-rows: auto auto auto 1fr auto; gap: 8px;
+    padding: 16px 20px 14px; border-radius: 14px; border: 1px solid ${t.border}; background: ${t.card};
+  }
+  .top { display: flex; justify-content: space-between; align-items: center; }
+  .kind { font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: ${t.accent}; }
+  .go { font-size: 16px; color: ${t.accent}; }
+  h3 { font-size: 21px; font-weight: 700; letter-spacing: -.01em; color: ${t.title}; }
+  p { font-size: 13.5px; line-height: 1.45; color: ${t.text}; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; align-content: start; }
+  .foot { display: flex; justify-content: space-between; align-items: center; padding-top: 9px; border-top: 1px solid ${t.border}; font-size: 12.5px; color: ${t.text}; }
+  .foot span { display: inline-flex; align-items: center; gap: 6px; }
+  .live { color: ${t.accent}; font-weight: 600; }
+  .live i { width: 7px; height: 7px; border-radius: 50%; background: #3fb950; box-shadow: 0 0 0 3px rgba(63, 185, 80, .18); }
+</style></head><body><div class="card">
+  <div class="top"><span class="kind">${p.kind}</span>${iconHtml("external", t, "ic go")}</div>
+  <h3>${p.title}</h3>
+  <p>${p.text}</p>
+  <div class="chips">${chips(p.tech, t)}</div>
+  <div class="foot"><span>${iconHtml("github", t)}${p.repo}</span>${p.live ? `<span class="live"><i></i>Live demo</span>` : "<span></span>"}</div>
+</div></body></html>`;
+}
+
+const STACK_W = 860, STACK_H = 334;
+function stackPage(t) {
+  return `<!doctype html><html><head><meta charset="utf-8"><style>${base(t, STACK_W, STACK_H)}
+  .grid { position: absolute; inset: 2px; display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: 1fr 1fr; gap: 14px; }
+  .group { display: grid; align-content: start; gap: 12px; padding: 14px 16px; border-radius: 14px; border: 1px solid ${t.border}; background: ${t.card}; }
+  h4 { display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 650; color: ${t.title}; }
+  h4 .ic { font-size: 17px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+</style></head><body><div class="grid">
+  ${STACK.map((g) => `<div class="group"><h4>${iconHtml(g.icon, t)}${g.title}</h4><div class="chips">${chips(g.items, t)}</div></div>`).join("")}
+</div></body></html>`;
+}
+
+const BTN_W = 164, BTN_H = 48;
+function linkPage(l, t) {
+  return `<!doctype html><html><head><meta charset="utf-8"><style>${base(t, BTN_W, BTN_H)}
+  .btn {
+    position: absolute; inset: 2px; display: flex; align-items: center; justify-content: center; gap: 9px;
+    border-radius: 999px; border: 1.5px solid ${t.border}; background: ${t.card};
+    font-size: 15px; font-weight: 600; color: ${t.title};
+  }
+  .btn .ic { font-size: 17px; }
+  .btn .go { font-size: 13px; color: ${t.accent}; margin-left: -3px; }
+</style></head><body>
+  <div class="btn">${iconHtml(l.icon, t)}${l.label}${iconHtml("external", t, "ic go")}</div>
+</body></html>`;
+}
+
+const work = mkdtempSync(path.join(tmpdir(), "readme-cards-"));
+function shoot(name, html, width, height) {
+  const file = path.join(work, `${name}.html`);
+  writeFileSync(file, html);
+  // A fresh Chrome profile per image: reusing one can hang while the previous Chrome is still closing.
+  const profile = mkdtempSync(path.join(work, "profile-"));
+  execFileSync(CHROME, [
+    "--headless=new", "--disable-gpu", "--no-first-run", `--user-data-dir=${profile}`,
+    "--hide-scrollbars", "--force-device-scale-factor=2", `--window-size=${width},${height}`,
+    "--default-background-color=00000000", "--virtual-time-budget=3000",
+    `--screenshot=${path.join(root, "assets", "cards", `${name}.png`)}`, pathToFileURL(file).href,
+  ], { stdio: "pipe", timeout: 60000 });
+  console.log(`wrote assets/cards/${name}.png`);
+}
+
+try {
+  for (const [theme, t] of Object.entries(THEMES)) {
+    for (const p of PROJECTS) shoot(`project-${p.slug}-${theme}`, projectPage(p, t), CARD_W, CARD_H);
+    shoot(`stack-${theme}`, stackPage(t), STACK_W, STACK_H);
+    for (const l of LINKS) shoot(`link-${l.slug}-${theme}`, linkPage(l, t), BTN_W, BTN_H);
+  }
+} finally {
+  rmSync(work, { recursive: true, force: true });
+}
