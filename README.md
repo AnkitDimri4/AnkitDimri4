@@ -8,7 +8,7 @@ I'm a software engineer who likes owning things end to end: the mobile app, the 
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="assets/brain-map-dark.png">
-  <img src="assets/brain-map-light.png" alt="Brain map of Ankit Dimri's work. GitHub activity at FileSure: 1,299 contributions in 83 active days from 25 April to 12 October 2026, busiest day 77, mirrored to my main graph. FileSure 2026: intern to Software Engineer in 3 months, ran the tech with the founder, 21 runbooks. Mobile: iOS and Android apps from scratch, Google Play 1.0.7 to 1.0.13, App Store 1.0.9 to 1.0.13, 80+ over-the-air updates. Search and Data: 3.8M-company screening in 6 days, 60 s timeouts to seconds, 146 sub-sectors. Cloud and DevOps: AWS to GCP, gated Jenkins CI/CD, search for 3.67M companies and 8.7M directors. Web and APIs: Next.js, React, Node.js, name to CIN/DIN lookup API. Mentoring: 25,000+ learners over 3 years at Tutedude." width="100%">
+  <img src="assets/brain-map-light.png" alt="Brain map of Ankit Dimri's work. GitHub activity at FileSure: 1,299 contributions in 83 active days from 25 April to 12 October 2026, busiest day 77, mirrored to my main graph. FileSure 2026: intern to Software Engineer in 3 months, ran the tech with the founder, 21 runbooks. Mobile: iOS and Android apps from scratch, Google Play 1.0.7 to 1.0.13, App Store 1.0.9 to 1.0.13, 80+ over-the-air updates. Search and Data: 3.8M-company screening in 6 days, 60 s timeouts to seconds, 146 sub-sectors. Cloud and DevOps: AWS to GCP, gated Jenkins CI/CD, search for 3.67M companies and 8.7M directors. Web and APIs: Next.js, React, Node.js, developer API with name to CIN/DIN lookup. Mentoring: 25,000+ learners over 3+ years, part-time, at Tutedude." width="100%">
 </picture>
 
 <p align="center">
@@ -20,7 +20,7 @@ I'm a software engineer who likes owning things end to end: the mobile app, the 
   </a>
 </p>
 
-> My 2026 work (April–October) was in FileSure's private repositories. The graph below includes it, mirrored day by day from my work account, [@ankitdimri-art](https://github.com/ankitdimri-art).
+> My 2026 work (April–October) was in FileSure's private repositories, so the code isn't public. The graph below includes those contributions, mirrored day by day.
 
 ### Projects
 

@@ -42,7 +42,7 @@ const CARDS = [
   ] },
   { x: 24, y: 764, icon: "mentor", title: "Mentoring", lines: [
     "<b>25,000+</b> learners helped",
-    "3 years as a mentor at Tutedude",
+    "3+ years at Tutedude, part-time",
     "Full-stack · DSA · ML · React Native",
   ] },
   { x: W - 24 - CARD_W, y: 330, icon: "mobile", title: "Mobile", lines: [
@@ -58,7 +58,7 @@ const CARDS = [
   ] },
   { x: W - 24 - CARD_W, y: 786, icon: "code", title: "Web & APIs", lines: [
     "Next.js · React · Node.js · Express",
-    "Name → CIN/DIN lookup API",
+    "Developer API: name → CIN/DIN lookup",
     "MongoDB · PostgreSQL · ClickHouse",
   ] },
   { x: (W - CARD_W) / 2, y: 842, to: "top", icon: "projects", title: "Side projects", lines: [
