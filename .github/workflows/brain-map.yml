@@ -1,0 +1,36 @@
+name: Brain map
+
+# The README's brain map is a picture of the live brain map page. This re-takes it every day (and
+# whenever it's run by hand from the Actions tab) and commits any change, so the README follows the
+# live page.
+on:
+  schedule:
+    - cron: "17 3 * * *" # 03:17 UTC, every day
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: brain-map
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    name: Refresh from the live page
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - run: node scripts/brain-map.mjs
+      - name: Commit any change
+        run: |
+          git add README.md assets/brain-map-light.png assets/brain-map-dark.png assets/live-button-light.png assets/live-button-dark.png
+          if git diff --cached --quiet; then echo "Nothing changed."; exit 0; fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Brain map: refresh from the live page"
+          git push

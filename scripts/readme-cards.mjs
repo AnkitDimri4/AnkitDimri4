@@ -1,13 +1,14 @@
 // node scripts/readme-cards.mjs
 //
-// Draws the README's work and project cards, the tech stack and the link buttons in the brain
+// Draws the README's intro, work and project cards, the tech stack and the link buttons in the brain
 // map's style, light and dark (GitHub shows the one that matches the viewer's theme):
+//   assets/cards/intro-{light,dark}.png
 //   assets/cards/work-filesure-{light,dark}.png
 //   assets/cards/project-<slug>-{light,dark}.png
 //   assets/cards/stack-{light,dark}.png
 //   assets/cards/link-<slug>-{light,dark}.png
 //
-// To update: edit WORK, PROJECTS, STACK or LINKS below, run this, commit the PNGs. Icons come from
+// To update: edit INTRO, WORK, PROJECTS, STACK or LINKS below, run this, commit the PNGs. Icons come from
 // assets/cards/icons.json (Simple Icons, CC0, and Feather/Lucide/Tabler, MIT/ISC, with brand
 // colours). Needs Chrome or Edge (found on macOS, Windows and Linux; CHROME_PATH overrides).
 import { execFileSync } from "node:child_process";
@@ -42,6 +43,13 @@ if (!existsSync(CHROME)) {
 }
 const font = pathToFileURL(path.join(root, "assets", "fonts", "geist.woff2")).href;
 const ICONS = JSON.parse(readFileSync(path.join(root, "assets", "cards", "icons.json"), "utf8"));
+
+// Who I am, at the top of the README.
+const INTRO = {
+  kind: "Software Engineer · Dehradun, India", title: "Hi, I'm Ankit 👋", status: "Open to new roles",
+  text: "I like owning things end to end: the mobile app, the website, the APIs behind them and the cloud they run on. Here's the map of what I've built.",
+  areas: [["mobile", "iOS & Android apps"], ["layout", "Websites"], ["server", "APIs"], ["cloud", "Cloud & DevOps"], ["sparkles", "Machine learning"]],
+};
 
 // My job, as a wide card. Only what is already public (the brain map, the app stores).
 const WORK = {
@@ -160,6 +168,32 @@ function projectPage(p, t) {
 </div></body></html>`;
 }
 
+const INTRO_W = 900, INTRO_H = 196;
+function introPage(t) {
+  const i = INTRO;
+  return `<!doctype html><html><head><meta charset="utf-8"><style>${base(t, INTRO_W, INTRO_H)}
+  .card {
+    position: absolute; inset: 2px; display: grid; align-content: center; gap: 10px;
+    padding: 18px 24px; border-radius: 14px; border: 1px solid ${t.border}; background: ${t.card};
+  }
+  .top { display: flex; justify-content: space-between; align-items: center; }
+  .kind { font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: ${t.accent}; }
+  .status {
+    display: inline-flex; align-items: center; gap: 7px; padding: 4px 11px; border-radius: 999px;
+    border: 1px solid ${t.border}; background: ${t.chip}; font-size: 12px; font-weight: 600; color: ${t.title};
+  }
+  .status i { width: 7px; height: 7px; border-radius: 50%; background: #3fb950; box-shadow: 0 0 0 3px rgba(63, 185, 80, .18); }
+  h3 { font-size: 26px; font-weight: 700; letter-spacing: -.01em; color: ${t.title}; }
+  p { font-size: 14.5px; line-height: 1.5; color: ${t.text}; max-width: 760px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 2px; }
+</style></head><body><div class="card">
+  <div class="top"><span class="kind">${i.kind}</span><span class="status"><i></i>${i.status}</span></div>
+  <h3>${i.title}</h3>
+  <p>${i.text}</p>
+  <div class="chips">${chips(i.areas, t)}</div>
+</div></body></html>`;
+}
+
 const WORK_W = 900, WORK_H = 236;
 function workPage(t) {
   const w = WORK;
@@ -232,6 +266,7 @@ function shoot(name, html, width, height) {
 
 try {
   for (const [theme, t] of Object.entries(THEMES)) {
+    shoot(`intro-${theme}`, introPage(t), INTRO_W, INTRO_H);
     shoot(`work-filesure-${theme}`, workPage(t), WORK_W, WORK_H);
     for (const p of PROJECTS) shoot(`project-${p.slug}-${theme}`, projectPage(p, t), CARD_W, CARD_H);
     shoot(`stack-${theme}`, stackPage(t), STACK_W, STACK_H);

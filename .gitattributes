@@ -2,3 +2,5 @@
 * text=auto eol=lf
 *.png binary
 *.woff2 binary
+# Built from react-icons (Simple Icons, Lucide, Feather, Tabler): collapsed in diffs
+assets/cards/icons.json linguist-generated
