@@ -63,8 +63,8 @@ const WORK = {
 const PROJECTS = [
   {
     slug: "portfolio", kind: "Full stack · My site", title: "Portfolio", repo: "Portfolio", live: true,
-    text: "React + Express + PostgreSQL, with live GitHub and LeetCode stats and a live brain map.",
-    tech: [["react", "React"], ["vite", "Vite"], ["nodejs", "Node.js"], ["postgresql", "PostgreSQL"]],
+    text: "React + Express + PostgreSQL, with live GitHub and LeetCode stats, a live brain map and a Google Meet scheduler.",
+    tech: [["react", "React"], ["vite", "Vite"], ["nodejs", "Node.js"], ["postgresql", "PostgreSQL"], ["calendar", "Google Calendar"]],
   },
   {
     slug: "hcp-crm", kind: "AI · Full stack", title: "AI-first HCP CRM", repo: "ai-first-hcp-interaction-crm", live: true,
