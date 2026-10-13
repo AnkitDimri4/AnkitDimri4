@@ -4,8 +4,10 @@
 // circuit lines out to a card for each area of work. Writes assets/brain-map-light.png and
 // assets/brain-map-dark.png (GitHub shows the one that matches the viewer's theme), plus the
 // README's "Explore the live brain map" button, assets/live-button-light.png and -dark.png.
+// The top card draws my FileSure contribution graph from assets/work-contributions.json
+// (date → contributions, copied from my work account's public graph).
 //
-// To update: edit CARDS below, run this, commit the two PNGs. Needs Google Chrome
+// To update: edit CARDS below, run this, commit the PNGs. Needs Google Chrome
 // (set CHROME_PATH if it isn't in /Applications).
 import { execFileSync } from "node:child_process";
 import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
@@ -16,61 +18,69 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const CHROME = process.env.CHROME_PATH || "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
 const W = 1200;
-const H = 700;
+const H = 980;
 const CARD_W = 360;
+const TOP_W = 420; // the activity card on top
+const TOP_H = 256;
 
-// Card positions are the card's top-left corner; `to: "top"` takes the line in from above.
-// Lines in a card may use <b> for emphasis.
+// Card positions are the card's top-left corner; `to: "top"` takes the line in from above and
+// `to: "bottom"` from below. Lines in a card may use <b> for emphasis.
 const CARDS = [
-  { x: 24, y: 36, icon: "briefcase", title: "FileSure · 2026", lines: [
+  { x: (W - TOP_W) / 2, y: 24, w: TOP_W, h: TOP_H, to: "bottom", icon: "commits", title: "GitHub activity at FileSure", heatmap: true, lines: [
+    "<b>1,299</b> contributions in <b>83</b> active days",
+    "Busiest day <b>77</b> · mirrored to my main graph",
+  ] },
+  { x: 24, y: 330, icon: "briefcase", title: "FileSure · 2026", lines: [
     "Intern → <b>Software Engineer</b> in 3 months",
     "Ran the company's tech with the founder",
     "Releases, incidents and <b>21</b> runbooks",
   ] },
-  { x: 24, y: 258, icon: "search", title: "Search & Data", lines: [
+  { x: 24, y: 552, icon: "search", title: "Search & Data", lines: [
     "<b>3.8M</b>-company screening rebuilt in 6 days",
     "<b>60 s</b> timeouts → answers in seconds",
     "<b>146</b> sub-sectors, measured precision",
   ] },
-  { x: 24, y: 470, icon: "mentor", title: "Mentoring", lines: [
+  { x: 24, y: 764, icon: "mentor", title: "Mentoring", lines: [
     "<b>25,000+</b> learners helped",
     "3 years as a mentor at Tutedude",
     "Full-stack · DSA · ML · React Native",
   ] },
-  { x: W - 24 - CARD_W, y: 36, icon: "mobile", title: "Mobile", lines: [
+  { x: W - 24 - CARD_W, y: 330, icon: "mobile", title: "Mobile", lines: [
     "iOS & Android apps <b>built from scratch</b>",
     "Google Play <b>1.0.7 → 1.0.13</b>",
     "App Store <b>1.0.9 → 1.0.13</b>",
     "<b>80+</b> over-the-air updates",
   ] },
-  { x: W - 24 - CARD_W, y: 280, icon: "cloud", title: "Cloud & DevOps", lines: [
+  { x: W - 24 - CARD_W, y: 574, icon: "cloud", title: "Cloud & DevOps", lines: [
     "Led the backend move <b>AWS → GCP</b>",
     "Gated Jenkins CI/CD with rollbacks",
     "Search for <b>3.67M</b> companies, <b>8.7M</b> directors",
   ] },
-  { x: W - 24 - CARD_W, y: 492, icon: "code", title: "Web & APIs", lines: [
+  { x: W - 24 - CARD_W, y: 786, icon: "code", title: "Web & APIs", lines: [
     "Next.js · React · Node.js · Express",
     "Name → CIN/DIN lookup API",
     "MongoDB · PostgreSQL · ClickHouse",
   ] },
-  { x: (W - CARD_W) / 2, y: 548, to: "top", icon: "projects", title: "Side projects", lines: [
+  { x: (W - CARD_W) / 2, y: 842, to: "top", icon: "projects", title: "Side projects", lines: [
     "QuickCart · RN-Wallet",
     "AI-first HCP CRM · Portfolio",
   ] },
 ];
 
-const CENTER = { x: W / 2, y: 290, r: 112 };
+const CENTER = { x: W / 2, y: 584, r: 112 };
 
 const THEMES = {
   light: {
     bg: "#ffffff", dots: "rgba(31,35,40,.09)", glow: "rgba(77,99,120,.10)",
     card: "#f6f8fa", border: "#d0d7de", title: "#1f2328", text: "#59636e", strong: "#1f2328",
     accent: "#4d6378", ink: [0x3f, 0x48, 0x52],
+    heat: ["#e6e9ed", "#9be9a8", "#40c463", "#30a14e", "#216e39"],
   },
   dark: {
     bg: "#0d1117", dots: "rgba(240,246,252,.07)", glow: "rgba(125,154,181,.14)",
     card: "#161b22", border: "#30363d", title: "#e6edf3", text: "#9198a1", strong: "#e6edf3",
     accent: "#7d9ab5", ink: [0xc9, 0xd1, 0xd9],
+    heat: ["#21262d", "#0e4429", "#006d32", "#26a641", "#39d353"],
   },
 };
 
@@ -82,24 +92,50 @@ const ICONS = {
   cloud: "<svg stroke=\"currentColor\" fill=\"none\" stroke-width=\"2\" viewBox=\"0 0 24 24\" stroke-linecap=\"round\" stroke-linejoin=\"round\" color=\"currentColor\" style=\"color:currentColor\" height=\"20\" width=\"20\" xmlns=\"http://www.w3.org/2000/svg\"><circle cx=\"12\" cy=\"17\" r=\"3\"></circle><path d=\"M4.2 15.1A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.2\"></path><path d=\"m15.7 18.4-.9-.3\"></path><path d=\"m9.2 15.9-.9-.3\"></path><path d=\"m10.6 20.7.3-.9\"></path><path d=\"m13.1 14.2.3-.9\"></path><path d=\"m13.6 20.7-.4-1\"></path><path d=\"m10.8 14.3-.4-1\"></path><path d=\"m8.3 18.6 1-.4\"></path><path d=\"m14.7 15.8 1-.4\"></path></svg>",
   code: "<svg stroke=\"currentColor\" fill=\"none\" stroke-width=\"2\" viewBox=\"0 0 24 24\" stroke-linecap=\"round\" stroke-linejoin=\"round\" color=\"currentColor\" style=\"color:currentColor\" height=\"20\" width=\"20\" xmlns=\"http://www.w3.org/2000/svg\"><polyline points=\"16 18 22 12 16 6\"></polyline><polyline points=\"8 6 2 12 8 18\"></polyline></svg>",
   mentor: "<svg stroke=\"currentColor\" fill=\"none\" stroke-width=\"2\" viewBox=\"0 0 24 24\" stroke-linecap=\"round\" stroke-linejoin=\"round\" color=\"currentColor\" style=\"color:currentColor\" height=\"20\" width=\"20\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z\"></path><path d=\"M22 10v6\"></path><path d=\"M6 12.5V16a6 3 0 0 0 12 0v-3.5\"></path></svg>",
+  commits: "<svg stroke=\"currentColor\" fill=\"none\" stroke-width=\"2\" viewBox=\"0 0 24 24\" stroke-linecap=\"round\" stroke-linejoin=\"round\" color=\"currentColor\" style=\"color:currentColor\" height=\"20\" width=\"20\" xmlns=\"http://www.w3.org/2000/svg\"><circle cx=\"12\" cy=\"12\" r=\"3\"></circle><line x1=\"3\" x2=\"9\" y1=\"12\" y2=\"12\"></line><line x1=\"15\" x2=\"21\" y1=\"12\" y2=\"12\"></line></svg>",
   projects: "<svg stroke=\"currentColor\" fill=\"none\" stroke-width=\"2\" viewBox=\"0 0 24 24\" stroke-linecap=\"round\" stroke-linejoin=\"round\" color=\"currentColor\" style=\"color:currentColor\" height=\"20\" width=\"20\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M9 20H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H20a2 2 0 0 1 2 2v5\"></path><circle cx=\"13\" cy=\"12\" r=\"2\"></circle><path d=\"M18 19c-2.8 0-5-2.2-5-5v8\"></path><circle cx=\"20\" cy=\"19\" r=\"2\"></circle></svg>",
 };
 
 const logo = `data:image/png;base64,${readFileSync(path.join(root, "assets", "logo-source.png")).toString("base64")}`;
 const font = pathToFileURL(path.join(root, "assets", "fonts", "geist.woff2")).href;
+const contributions = JSON.parse(readFileSync(path.join(root, "assets", "work-contributions.json"), "utf8"));
 
-// Where each line meets its card: the side card's title row, or the bottom card's top edge.
+// The contribution graph: a column per week (Sunday on top), shaded by quartile of the active days.
+function heatmap(t) {
+  const days = Object.keys(contributions).sort();
+  const active = Object.values(contributions).filter(Boolean).sort((a, b) => a - b);
+  const cut = [0.25, 0.5, 0.75].map((f) => active[Math.floor(active.length * f)]);
+  const level = (n) => (n === 0 ? 0 : 1 + cut.filter((c) => n > c).length);
+  const P = 11.5, C = 9, TOP = 14;
+  const first = new Date(`${days[0]}T00:00:00Z`);
+  let cells = "", labels = `<text x="0" y="9">Apr</text>`;
+  for (const iso of days) {
+    const d = new Date(`${iso}T00:00:00Z`);
+    const i = Math.round((d - first) / 864e5), col = Math.floor(i / 7), row = i % 7;
+    cells += `<rect x="${col * P}" y="${TOP + row * P}" width="${C}" height="${C}" rx="2" fill="${t.heat[level(contributions[iso])]}"/>`;
+    if (d.getUTCDate() <= 7 && row === 0) labels += `<text x="${col * P}" y="9">${d.toLocaleString("en", { month: "short", timeZone: "UTC" })}</text>`;
+  }
+  const cols = Math.ceil(days.length / 7);
+  const scale = t.heat.map((c) => `<i style="background:${c}"></i>`).join("");
+  return `<svg class="heat" viewBox="0 0 ${cols * P - (P - C)} ${TOP + 7 * P - (P - C)}">${labels}${cells}</svg>
+    <p class="when"><span>25 Apr – 12 Oct 2026</span><span class="scale">Less ${scale} More</span></p>`;
+}
+
+// Where each line meets its card: the side card's title row, the bottom card's top edge, or
+// the top card's bottom edge.
 function anchor(card) {
-  if (card.to === "top") return { x: card.x + CARD_W / 2, y: card.y, bottom: true };
-  const left = card.x + CARD_W / 2 < CENTER.x;
-  return { x: left ? card.x + CARD_W : card.x, y: card.y + 30, bottom: false };
+  const w = card.w ?? CARD_W;
+  if (card.to === "top") return { x: card.x + w / 2, y: card.y, vertical: true };
+  if (card.to === "bottom") return { x: card.x + w / 2, y: card.y + card.h, vertical: true };
+  const left = card.x + w / 2 < CENTER.x;
+  return { x: left ? card.x + w : card.x, y: card.y + 30, vertical: false };
 }
 
 function connector(card, t) {
   const a = anchor(card);
   const dx = a.x - CENTER.x, dy = a.y - CENTER.y, len = Math.hypot(dx, dy);
   const s = { x: CENTER.x + (dx / len) * CENTER.r, y: CENTER.y + (dy / len) * CENTER.r };
-  const d = a.bottom
+  const d = a.vertical
     ? `M${s.x},${s.y} C${s.x},${(s.y + a.y) / 2} ${a.x},${(s.y + a.y) / 2} ${a.x},${a.y}`
     : `M${s.x},${s.y} C${(s.x + a.x) / 2},${s.y} ${(s.x + a.x) / 2},${a.y} ${a.x},${a.y}`;
   const dot = (p) => `<circle cx="${p.x}" cy="${p.y}" r="4.5" fill="${t.bg}" stroke="${t.accent}" stroke-width="2"/>`;
@@ -129,6 +165,11 @@ function page(t) {
   .card li { position: relative; padding-left: 15px; font-size: 14px; line-height: 1.4; color: ${t.text}; }
   .card li::before { content: ""; position: absolute; left: 0; top: .58em; width: 6px; height: 6px; border-radius: 50%; background: ${t.accent}; opacity: .8; }
   .card b { color: ${t.strong}; font-weight: 650; }
+  .heat { display: block; width: 100%; height: auto; margin-top: 14px; }
+  .heat text { font-size: 8px; fill: ${t.text}; }
+  .when { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; font-size: 12px; color: ${t.text}; }
+  .scale { display: inline-flex; align-items: center; gap: 3px; }
+  .scale i { width: 9px; height: 9px; border-radius: 2px; }
   .center {
     position: absolute; left: ${CENTER.x - CENTER.r}px; top: ${CENTER.y - CENTER.r}px;
     width: ${CENTER.r * 2}px; height: ${CENTER.r * 2}px; border-radius: 50%;
@@ -140,9 +181,10 @@ function page(t) {
   .center span { font-size: 13px; color: ${t.text}; margin-top: 2px; }
 </style></head><body><div class="map">
   <svg class="lines" width="${W}" height="${H}">${CARDS.map((c) => connector(c, t)).join("")}</svg>
-  ${CARDS.map((c) => `<div class="card" style="left:${c.x}px;top:${c.y}px">
+  ${CARDS.map((c) => `<div class="card" style="left:${c.x}px;top:${c.y}px;width:${c.w ?? CARD_W}px${c.h ? `;height:${c.h}px` : ""}">
     <h3>${ICONS[c.icon]}${c.title}</h3>
     <ul>${c.lines.map((l) => `<li>${l}</li>`).join("")}</ul>
+    ${c.heatmap ? heatmap(t) : ""}
   </div>`).join("")}
   <div class="center">
     <canvas id="logo" width="213" height="149"></canvas>
