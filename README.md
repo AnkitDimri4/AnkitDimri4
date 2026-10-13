@@ -20,7 +20,7 @@ I'm a software engineer who likes owning things end to end: the mobile app, the 
   </a>
 </p>
 
-> Most of my 2026 work lives in FileSure's private repositories, so it doesn't show on the contribution graph below.
+> My 2026 work (April–October) was in FileSure's private repositories. The graph below includes it, mirrored day by day from my work account, [@ankitdimri-art](https://github.com/ankitdimri-art).
 
 ### Projects
 
