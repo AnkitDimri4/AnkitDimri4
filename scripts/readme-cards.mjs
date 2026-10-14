@@ -63,7 +63,7 @@ const WORK = {
 const PROJECTS = [
   {
     slug: "portfolio", kind: "Full stack · My site", title: "Portfolio", repo: "Portfolio", live: true,
-    text: "React + Express + PostgreSQL, with live GitHub and LeetCode stats, a live brain map and a Google Meet scheduler.",
+    text: "React + Express + PostgreSQL: a free one-page resume builder, live GitHub and LeetCode stats, a live brain map and a Google Meet scheduler.",
     tech: [["react", "React"], ["vite", "Vite"], ["nodejs", "Node.js"], ["postgresql", "PostgreSQL"], ["calendar", "Google Calendar"]],
   },
   {
@@ -98,6 +98,8 @@ const LINKS = [
   { slug: "android", icon: "googleplay", label: "Android app" },
   { slug: "website", icon: "globe", label: "Website" },
   { slug: "brainmap", icon: "brain", label: "Brain map" },
+  // Under the projects
+  { slug: "resume-builder", icon: "layout", label: "Resume builder", w: 190 },
   // Find me (`w` widens a button for a longer label)
   { slug: "schedule", icon: "calendar", label: "Schedule a call", w: 196 },
   { slug: "portfolio", icon: "globe", label: "Portfolio" },

@@ -34,12 +34,15 @@
 ### Projects
 
 <p>
-  <a href="https://github.com/AnkitDimri4/Portfolio"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/project-portfolio-dark.png"><img src="assets/cards/project-portfolio-light.png" alt="Portfolio: React, Express and PostgreSQL, with live GitHub and LeetCode stats, a live brain map and a Google Meet scheduler. React, Vite, Node.js, PostgreSQL, Google Calendar. Live demo." width="49%"></picture></a>
+  <a href="https://github.com/AnkitDimri4/Portfolio"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/project-portfolio-dark.png"><img src="assets/cards/project-portfolio-light.png" alt="Portfolio: React, Express and PostgreSQL: a free one-page resume builder, live GitHub and LeetCode stats, a live brain map and a Google Meet scheduler. React, Vite, Node.js, PostgreSQL, Google Calendar. Live demo." width="49%"></picture></a>
   <a href="https://github.com/AnkitDimri4/ai-first-hcp-interaction-crm"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/project-hcp-crm-dark.png"><img src="assets/cards/project-hcp-crm-light.png" alt="AI-first HCP CRM: reps log doctor visits in plain English; a LangGraph agent with 5 tools fills in the record. LangGraph, FastAPI, PostgreSQL, React. Live demo." width="49%"></picture></a>
 </p>
 <p>
   <a href="https://github.com/AnkitDimri4/RN-WALLET"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/project-rn-wallet-dark.png"><img src="assets/cards/project-rn-wallet-light.png" alt="RN-Wallet: React Native expense tracker on Express and PostgreSQL; an ML service sorts transactions into categories. React Native, PostgreSQL, Redis, FastAPI." width="49%"></picture></a>
   <a href="https://github.com/AnkitDimri4/quickcart-mern"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/project-quickcart-dark.png"><img src="assets/cards/project-quickcart-light.png" alt="QuickCart: MERN store with JWT roles, Stripe payments, Cloudinary media and an admin dashboard. React, Node.js, MongoDB, Stripe. Live demo." width="49%"></picture></a>
+</p>
+<p>
+  <a href="https://portfolio-nine-orcin-33.vercel.app/resume-builder/"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/link-resume-builder-dark.png"><img src="assets/cards/link-resume-builder-light.png" alt="Try my free resume builder" width="148"></picture></a>
 </p>
 
 ### Tech I use
