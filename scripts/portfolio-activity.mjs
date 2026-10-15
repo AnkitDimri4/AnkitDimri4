@@ -25,33 +25,33 @@ const commits = gh("api", "--paginate", `repos/${OWNER}/${REPO}/commits?author=$
   .filter(Boolean)
   .map(dayInIndia);
 
-const mergedPullRequests = JSON.parse(
-  gh("api", "graphql", "-f", `query=query { repository(owner: "${OWNER}", name: "${REPO}") { pullRequests(states: MERGED) { totalCount } } }`),
-).data.repository.pullRequests.totalCount;
+// Every node of one of the repository's lists (GraphQL), a hundred at a time
+const every = (list, args, fields) => {
+  const nodes = [];
+  const query = `query($after: String) { repository(owner: "${OWNER}", name: "${REPO}") {
+    ${list}(${args}first: 100, after: $after) { nodes { ${fields} } pageInfo { hasNextPage endCursor } } } }`;
+  for (let after = null; ; ) {
+    const page = JSON.parse(gh("api", "graphql", "-f", `query=${query}`, ...(after ? ["-f", `after=${after}`] : []))).data.repository[list];
+    nodes.push(...page.nodes);
+    if (!page.pageInfo.hasNextPage) return nodes;
+    after = page.pageInfo.endCursor;
+  }
+};
+
+// Merged pull requests, by the day they were merged
+const merged = every("pullRequests", "states: MERGED, ", "mergedAt").map((pr) => dayInIndia(pr.mergedAt));
 
 // Vercel records a GitHub deployment for each build it runs, preview or production (a skipped build has
 // none), and its statuses say whether it finished
-const deployments = [];
-let production = 0;
-const QUERY = `query($after: String) { repository(owner: "${OWNER}", name: "${REPO}") {
-  deployments(first: 100, after: $after) {
-    nodes { createdAt environment statuses(first: 10) { nodes { state } } }
-    pageInfo { hasNextPage endCursor }
-  } } }`;
-for (let after = null; ; ) {
-  const page = JSON.parse(gh("api", "graphql", "-f", `query=${QUERY}`, ...(after ? ["-f", `after=${after}`] : [])))
-    .data.repository.deployments;
-  for (const d of page.nodes) {
-    deployments.push(dayInIndia(d.createdAt));
-    if (d.environment === "Production" && d.statuses.nodes.some((s) => s.state === "SUCCESS")) production++;
-  }
-  if (!page.pageInfo.hasNextPage) break;
-  after = page.pageInfo.endCursor;
-}
+const builds = every("deployments", "", "createdAt environment statuses(first: 10) { nodes { state } }");
+const deployments = builds.map((d) => dayInIndia(d.createdAt));
+const production = builds.filter((d) => d.environment === "Production" && d.statuses.nodes.some((s) => s.state === "SUCCESS")).length;
 
 const days = {};
-for (const day of commits) (days[day] ??= { commits: 0, deployments: 0 }).commits++;
-for (const day of deployments) (days[day] ??= { commits: 0, deployments: 0 }).deployments++;
+const day = (date) => (days[date] ??= { commits: 0, pullRequests: 0, deployments: 0 });
+for (const date of commits) day(date).commits++;
+for (const date of merged) day(date).pullRequests++;
+for (const date of deployments) day(date).deployments++;
 const sorted = Object.fromEntries(Object.entries(days).sort(([a], [b]) => a.localeCompare(b)));
 
 const activity = {
@@ -62,7 +62,7 @@ const activity = {
   to: dayInIndia(new Date().toISOString()),
   totals: {
     commits: commits.length,
-    mergedPullRequests,
+    mergedPullRequests: merged.length,
     deployments: deployments.length,
     productionDeploys: production,
     activeDays: Object.values(sorted).filter((d) => d.commits).length,

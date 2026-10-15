@@ -61,8 +61,9 @@ const WORK = {
   foot: "1,299 contributions · private repositories", cta: "Open on the brain map",
 };
 
-// In the resume's order. Each card links to its repository; `live` adds the "Live demo" mark, and
-// `featured` draws it wide, with its numbers and a day-by-day graph (from portfolio-activity.json).
+// In the resume's order. Each card links to its repository (or `site`, with its `cta`); `live` adds the
+// "Live demo" mark, `highlight` an accent border, and `featured` draws it wide, with its numbers and graphs
+// (from portfolio-activity.json).
 const PROJECTS = [
   {
     slug: "portfolio", kind: "Full stack · My site", title: "Portfolio", repo: "Portfolio", live: true,
@@ -85,6 +86,12 @@ const PROJECTS = [
     text: "MERN store with JWT roles, Stripe payments, Cloudinary media and an admin dashboard.",
     tech: [["react", "React"], ["nodejs", "Node.js"], ["mongodb", "MongoDB"], ["stripe", "Stripe"]],
   },
+  {
+    // Not a repository of its own: it links to the live builder, and stands out like the work card
+    slug: "resume-builder", kind: "Live tool · On my site", title: "Resume builder", site: "portfolio-nine-orcin-33.vercel.app", cta: "Try it", highlight: true,
+    text: "Three templates, a live preview that keeps it to one page, an ATS check against a job posting, and the PDF by email, with no <span style=\"white-space: nowrap\">sign-up</span>.",
+    tech: [["layout", "3 templates"], ["sparkles", "ATS check"], ["file", "One-page PDF"], ["gmail", "By email"]],
+  },
 ];
 
 const STACK = [
@@ -102,8 +109,6 @@ const LINKS = [
   { slug: "android", icon: "googleplay", label: "Android app" },
   { slug: "website", icon: "globe", label: "Website" },
   { slug: "brainmap", icon: "brain", label: "Brain map" },
-  // Under the projects
-  { slug: "resume-builder", icon: "layout", label: "Resume builder", w: 190 },
   // Find me (`w` widens a button for a longer label)
   { slug: "schedule", icon: "calendar", label: "Schedule a call", w: 196 },
   { slug: "portfolio", icon: "globe", label: "Portfolio" },
@@ -153,7 +158,8 @@ function projectPage(p, t) {
   return `<!doctype html><html><head><meta charset="utf-8"><style>${base(t, CARD_W, CARD_H)}
   .card {
     position: absolute; inset: 2px; display: grid; grid-template-rows: auto auto auto 1fr auto; gap: 8px;
-    padding: 16px 20px 14px; border-radius: 14px; border: 1px solid ${t.border}; background: ${t.card};
+    padding: 16px 20px 14px; border-radius: 14px; border: 1px solid ${p.highlight ? t.accent : t.border}; background: ${t.card};
+    ${p.highlight ? `box-shadow: inset 0 0 0 4px color-mix(in srgb, ${t.accent} 8%, transparent);` : ""}
   }
   .top { display: flex; justify-content: space-between; align-items: center; }
   .kind { font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: ${t.accent}; }
@@ -170,19 +176,28 @@ function projectPage(p, t) {
   <h3>${p.title}</h3>
   <p>${p.text}</p>
   <div class="chips">${chips(p.tech, t)}</div>
-  <div class="foot"><span>${iconHtml("github", t)}${p.repo}</span>${p.live ? `<span class="live"><i></i>Live demo</span>` : "<span></span>"}</div>
+  <div class="foot"><span>${p.site ? iconHtml("globe", t) + p.site : iconHtml("github", t) + p.repo}</span>${p.cta || p.live ? `<span class="live"><i></i>${p.cta ?? "Live demo"}</span>` : "<span></span>"}</div>
 </div></body></html>`;
 }
 
-const FEATURE_W = 900, FEATURE_H = 484;
+const FEATURE_W = 900, FEATURE_H = 428;
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 const num = (n) => n.toLocaleString("en-IN");
-// The featured project: its numbers, and a calendar of my commits by day (GitHub's greens) with a ▲ on
-// each day the site was deployed, from the first commit to the day the data was read.
+// A rate per active day (a day with a commit): whole numbers from 10, one decimal below
+const perActiveDay = (n, a) => {
+  const rate = n / a.totals.activeDays;
+  return rate >= 10 ? String(Math.round(rate)) : rate.toFixed(1).replace(/\.0$/, "");
+};
+const dayLabel = (date) => `${Number(date.slice(8, 10))} ${MONTHS[Number(date.slice(5, 7)) - 1]}`;
+// The featured project: its numbers with their rates, then two graphs side by side: day by day, a calendar
+// of my commits (GitHub's greens) with a ▲ on each day the site was deployed; month by month, bars for
+// commits, merged pull requests and deployments.
 function featuredPage(p, a, t) {
   const greens = t.dark ? ["#21262d", "#0e4429", "#006d32", "#26a641", "#39d353"] : ["#ebedf0", "#9be9a8", "#40c463", "#30a14e", "#216e39"];
   const level = (n) => (n === 0 ? 0 : n <= 5 ? 1 : n <= 20 ? 2 : n <= 50 ? 3 : 4);
-  const mark = t.dark ? "#f0f6fc" : "#1f2328";
+  const ink = t.dark ? "#f0f6fc" : "#1f2328";
+  const purple = t.dark ? "#a371f7" : "#8250df";
+  const rateColor = t.dark ? "#3fb950" : "#1a7f37";
   // the ▲ takes whichever of near-black and white contrasts more with that day's green (WCAG's formula)
   const rel = (hex) => {
     const [r, g, b] = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16) / 255).map((c) => (c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4));
@@ -191,38 +206,68 @@ function featuredPage(p, a, t) {
   const markOn = (fill) => ((rel(fill) + 0.05) / (rel("#1f2328") + 0.05) >= 1.05 / (rel(fill) + 0.05) ? "#1f2328" : "#ffffff");
   const DAY = 86_400_000;
   const first = Date.parse(`${a.from}T00:00:00Z`), last = Date.parse(`${a.to}T00:00:00Z`);
+  const counts = (date) => ({ commits: 0, pullRequests: 0, deployments: 0, ...a.days[date] });
+
+  // Day by day
   const start = first - new Date(first).getUTCDay() * DAY; // the Sunday on or before the first day
   const weeks = Math.floor((last - start) / DAY / 7) + 1;
-  const CELL = 17, GAP = 4, STEP = CELL + GAP, LEFT = 30, TOP = 18;
-  let svg = "";
+  const CELL = 9.5, GAP = 2.5, STEP = CELL + GAP, LEFT = 25, TOP = 14;
+  let cal = "";
   for (let w = 0, month = -1; w < weeks; w++) {
     const sunday = new Date(start + w * 7 * DAY);
     if (sunday.getUTCMonth() !== month) {
       month = sunday.getUTCMonth();
-      if (w <= weeks - 2) svg += `<text x="${LEFT + w * STEP}" y="11">${MONTHS[month]}</text>`;
+      if (w <= weeks - 2) cal += `<text x="${LEFT + w * STEP}" y="9">${MONTHS[month]}</text>`;
     }
     for (let d = 0; d < 7; d++) {
       const time = start + (w * 7 + d) * DAY;
       if (time > last) break;
-      const day = a.days[new Date(time).toISOString().slice(0, 10)] ?? { commits: 0, deployments: 0 };
-      const x = LEFT + w * STEP, y = TOP + d * STEP;
+      const day = counts(new Date(time).toISOString().slice(0, 10));
       const fill = greens[level(day.commits)];
-      svg += `<rect x="${x}" y="${y}" width="${CELL}" height="${CELL}" rx="4" fill="${fill}"/>`;
-      if (day.deployments) svg += `<path d="M${x + CELL / 2} ${y + 4}L${x + CELL - 3.5} ${y + CELL - 4.5}H${x + 3.5}Z" fill="${markOn(fill)}"/>`;
+      const x = LEFT + w * STEP, y = TOP + d * STEP;
+      cal += `<rect x="${x}" y="${y}" width="${CELL}" height="${CELL}" rx="2.5" fill="${fill}"/>`;
+      if (day.deployments) cal += `<path d="M${x + CELL / 2} ${y + 2.2}L${x + CELL - 1.9} ${y + CELL - 2.4}H${x + 1.9}Z" fill="${markOn(fill)}"/>`;
     }
   }
-  for (const [d, label] of [[1, "Mon"], [3, "Wed"], [5, "Fri"]]) svg += `<text x="0" y="${TOP + d * STEP + 12.5}">${label}</text>`;
-  const width = LEFT + weeks * STEP - GAP, height = TOP + 7 * STEP - GAP;
-  const triangle = `<svg class="tri" viewBox="0 0 10 10"><path d="M5 1L9.5 9H.5Z" fill="${mark}"/></svg>`;
+  for (const [d, label] of [[1, "Mon"], [3, "Wed"], [5, "Fri"]]) cal += `<text x="0" y="${TOP + d * STEP + 7.5}">${label}</text>`;
+  const calW = LEFT + weeks * STEP - GAP, calH = TOP + 7 * STEP - GAP;
+  const busiestDay = Object.keys(a.days).reduce((best, date) => (counts(date).commits > counts(best).commits ? date : best));
+
+  // Month by month, as tall as the calendar: bars above, the months' names below
+  const months = [];
+  for (let m = Date.UTC(new Date(first).getUTCFullYear(), new Date(first).getUTCMonth(), 1); m <= last; ) {
+    const d = new Date(m);
+    const key = d.toISOString().slice(0, 7);
+    const total = { label: MONTHS[d.getUTCMonth()], commits: 0, pullRequests: 0, deployments: 0 };
+    for (const date of Object.keys(a.days)) if (date.startsWith(key)) for (const k of ["commits", "pullRequests", "deployments"]) total[k] += counts(date)[k];
+    months.push(total);
+    m = Date.UTC(d.getUTCFullYear(), d.getUTCMonth() + 1, 1);
+  }
+  const SERIES = [["commits", greens[3]], ["pullRequests", purple], ["deployments", ink]];
+  const SLOT = 40, BAR = 8.5, BAR_GAP = 2, BARS_TOP = 4, BARS_H = calH - BARS_TOP - 15;
+  const max = Math.max(1, ...months.flatMap((m) => SERIES.map(([k]) => m[k])));
+  let bars = "";
+  months.forEach((m, i) => {
+    const x0 = i * SLOT + (SLOT - (SERIES.length * BAR + (SERIES.length - 1) * BAR_GAP)) / 2;
+    SERIES.forEach(([k, color], j) => {
+      const h = m[k] ? Math.max(2.5, (m[k] / max) * BARS_H) : 1.5;
+      bars += `<rect x="${x0 + j * (BAR + BAR_GAP)}" y="${BARS_TOP + BARS_H - h}" width="${BAR}" height="${h}" rx="2" fill="${m[k] ? color : t.border}"/>`;
+    });
+    bars += `<text x="${i * SLOT + SLOT / 2}" y="${calH - 2}" text-anchor="middle">${m.label}</text>`;
+  });
+  const barsW = months.length * SLOT;
+  const busiestMonth = months.reduce((best, m) => (m.commits > best.commits ? m : best));
+
+  const triangle = `<svg class="tri" viewBox="0 0 10 10"><path d="M5 1L9.5 9H.5Z" fill="${ink}"/></svg>`;
   const tiles = [
-    ["git", num(a.totals.commits), "commits"],
-    ["github", num(a.totals.mergedPullRequests), "pull requests merged"],
-    ["vercel", num(a.totals.deployments), `deployments, ${num(a.totals.productionDeploys)} to production`],
-    ["sparkles", `${p.lighthouse[0]} · ${p.lighthouse[1]}`, "Lighthouse, mobile · desktop"],
+    ["git", num(a.totals.commits), "commits", `${perActiveDay(a.totals.commits, a)} per active day`],
+    ["github", num(a.totals.mergedPullRequests), "pull requests merged", `${perActiveDay(a.totals.mergedPullRequests, a)} per active day`],
+    ["vercel", num(a.totals.deployments), `deployments, ${num(a.totals.productionDeploys)} to production`, `${perActiveDay(a.totals.deployments, a)} per active day`],
+    ["sparkles", `${p.lighthouse[0]} · ${p.lighthouse[1]}`, "Lighthouse, mobile · desktop", "on the live site"],
   ];
   return `<!doctype html><html><head><meta charset="utf-8"><style>${base(t, FEATURE_W, FEATURE_H)}
   .card {
-    position: absolute; inset: 2px; display: grid; grid-template-rows: auto auto 1fr auto; gap: 14px;
+    position: absolute; inset: 2px; display: grid; grid-template-rows: auto 1fr auto; gap: 14px;
     padding: 18px 24px 14px; border-radius: 14px; border: 1px solid ${t.accent}; background: ${t.card};
     box-shadow: inset 0 0 0 4px color-mix(in srgb, ${t.accent} 8%, transparent);
   }
@@ -235,18 +280,23 @@ function featuredPage(p, a, t) {
   p { font-size: 14px; line-height: 1.45; color: ${t.text}; }
   .chips { display: flex; flex-wrap: wrap; gap: 6px; align-content: start; }
   .tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; align-content: start; }
-  .tile { display: grid; gap: 3px; padding: 10px 12px; border-radius: 10px; border: 1px solid ${t.border}; background: ${t.chip}; }
-  .tile b { display: inline-flex; align-items: center; gap: 7px; font-size: 22px; font-weight: 700; letter-spacing: -.01em; color: ${t.title}; }
-  .tile b .ic { font-size: 16px; }
+  .tile { display: flex; flex-direction: column; gap: 2px; padding: 9px 12px; border-radius: 10px; border: 1px solid ${t.border}; background: ${t.chip}; }
+  .tile b { display: inline-flex; align-items: center; gap: 7px; font-size: 21px; font-weight: 700; letter-spacing: -.01em; color: ${t.title}; }
+  .tile b .ic { font-size: 15px; }
   .tile span { font-size: 11.5px; line-height: 1.35; color: ${t.text}; }
-  .graph { display: grid; gap: 8px; align-content: start; }
-  .graph-top { display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: ${t.text}; }
-  .graph-top strong { font-weight: 600; color: ${t.title}; }
+  .tile em { margin-top: auto; padding-top: 2px; font-style: normal; font-size: 11.5px; font-weight: 600; color: ${rateColor}; }
+  .graphs { display: grid; grid-template-columns: ${calW}fr ${barsW}fr; gap: 30px; align-items: start; }
+  .graph { display: grid; gap: 7px; }
+  .graph-top { display: flex; justify-content: space-between; align-items: center; font-size: 11.5px; color: ${t.text}; }
+  .graph-top strong { font-size: 12.5px; font-weight: 600; color: ${t.title}; }
   .legend { display: inline-flex; align-items: center; gap: 4px; }
-  .legend i { width: 11px; height: 11px; border-radius: 3px; display: inline-block; }
-  .legend .tri { width: 11px; height: 11px; margin-left: 10px; }
-  .cal { width: 100%; height: auto; display: block; }
-  .cal text { font-size: 10px; fill: ${t.text}; }
+  .legend i { width: 10px; height: 10px; border-radius: 2.5px; display: inline-block; }
+  .legend .key { margin-left: 7px; }
+  .legend .tri { width: 10px; height: 10px; margin-left: 8px; }
+  .graph svg.chart { width: 100%; height: auto; display: block; }
+  .graph svg.chart text { font-size: 8.5px; fill: ${t.text}; }
+  .note { font-size: 11.5px; color: ${t.text}; }
+  .note b { font-weight: 600; color: ${t.title}; }
   .foot { display: flex; justify-content: space-between; align-items: center; padding-top: 9px; border-top: 1px solid ${t.border}; font-size: 12.5px; color: ${t.text}; }
   .foot span { display: inline-flex; align-items: center; gap: 6px; }
   .live { color: ${t.accent}; font-weight: 600; }
@@ -259,11 +309,19 @@ function featuredPage(p, a, t) {
       <p>${p.text}</p>
       <div class="chips">${chips(p.tech, t)}</div>
     </div>
-    <div class="tiles">${tiles.map(([icon, value, label]) => `<div class="tile"><b>${iconHtml(icon, t)}${value}</b><span>${label}</span></div>`).join("")}</div>
+    <div class="tiles">${tiles.map(([icon, value, label, rate]) => `<div class="tile"><b>${iconHtml(icon, t)}${value}</b><span>${label}</span><em>${rate}</em></div>`).join("")}</div>
   </div>
-  <div class="graph">
-    <div class="graph-top"><span><strong>My commits</strong> and the site's deployments, day by day</span><span class="legend">Less ${greens.map((c) => `<i style="background:${c}"></i>`).join("")} More ${triangle} deployed</span></div>
-    <svg class="cal" viewBox="0 0 ${width} ${height}" role="img">${svg}</svg>
+  <div class="graphs">
+    <div class="graph">
+      <div class="graph-top"><strong>Day by day</strong><span class="legend">Less ${greens.map((c) => `<i style="background:${c}"></i>`).join("")} More ${triangle} deployed</span></div>
+      <svg class="chart" viewBox="0 0 ${calW} ${calH}" role="img">${cal}</svg>
+      <div class="note">Busiest day, <b>${dayLabel(busiestDay)}</b>: ${num(counts(busiestDay).commits)} commits · ${num(counts(busiestDay).pullRequests)} pull requests · ${num(counts(busiestDay).deployments)} deployments</div>
+    </div>
+    <div class="graph">
+      <div class="graph-top"><strong>Month by month</strong><span class="legend">${SERIES.map(([k, c], i) => `<i class="${i ? "key" : ""}" style="background:${c}"></i>${{ commits: "commits", pullRequests: "PRs", deployments: "deploys" }[k]}`).join(" ")}</span></div>
+      <svg class="chart" viewBox="0 0 ${barsW} ${calH}" role="img">${bars}</svg>
+      <div class="note">Busiest month, <b>${busiestMonth.label}</b>: ${num(busiestMonth.commits)} commits · ${num(busiestMonth.pullRequests)} PRs · ${num(busiestMonth.deployments)} deploys</div>
+    </div>
   </div>
   <div class="foot"><span>${iconHtml("github", t)}${p.repo} · ${a.totals.activeDays} active days since ${MONTHS[new Date(first).getUTCMonth()]} ${new Date(first).getUTCFullYear()}</span>${p.live ? `<span class="live"><i></i>Live demo</span>` : "<span></span>"}</div>
 </div></body></html>`;
@@ -387,8 +445,9 @@ try {
     const since = new Date(`${ACTIVITY.from}T00:00:00Z`).toLocaleDateString("en-GB", { month: "long", year: "numeric", timeZone: "UTC" });
     const alt = `${featured.title}: ${featured.text} ${num(a.commits)} commits, ${num(a.mergedPullRequests)} pull requests merged, ` +
       `${num(a.deployments)} deployments (${num(a.productionDeploys)} to production), Lighthouse ${featured.lighthouse[0]} on mobile and ` +
-      `${featured.lighthouse[1]} on desktop, and a calendar of my commits and the site's deployments by day: ${a.activeDays} active days ` +
-      `since ${since}. Live demo.`;
+      `${featured.lighthouse[1]} on desktop. Graphs of my commits and the site's deployments, day by day and month by month: ` +
+      `${a.activeDays} active days since ${since}, with ${perActiveDay(a.commits, ACTIVITY)} commits, ${perActiveDay(a.mergedPullRequests, ACTIVITY)} ` +
+      `pull requests and ${perActiveDay(a.deployments, ACTIVITY)} deployments per active day. Live demo.`;
     const readmeFile = path.join(root, "README.md");
     const readme = readFileSync(readmeFile, "utf8");
     const next = readme.replace(new RegExp(`(project-${featured.slug}-light\\.png" alt=")[^"]*(")`), (_, open, close) => open + alt.replaceAll('"', "&quot;") + close);
