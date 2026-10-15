@@ -11,8 +11,9 @@ on:
 permissions:
   contents: write
 
+# One group with the Portfolio card workflow: both commit to main, so they never push at once
 concurrency:
-  group: brain-map
+  group: readme
   cancel-in-progress: false
 
 jobs:
@@ -33,4 +34,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git commit -m "Brain map: refresh from the live page"
+          git pull --rebase --quiet
           git push

@@ -34,11 +34,13 @@
 ### Projects
 
 <p>
-  <a href="https://github.com/AnkitDimri4/Portfolio"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/project-portfolio-dark.png"><img src="assets/cards/project-portfolio-light.png" alt="Portfolio: React, Express and PostgreSQL: a free one-page resume builder, live GitHub and LeetCode stats, a live brain map and a Google Meet scheduler. React, Vite, Node.js, PostgreSQL, Google Calendar. 340+ commits, 100+ pull requests and 130+ deploys. Live demo." width="49%"></picture></a>
-  <a href="https://github.com/AnkitDimri4/ai-first-hcp-interaction-crm"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/project-hcp-crm-dark.png"><img src="assets/cards/project-hcp-crm-light.png" alt="AI-first HCP CRM: reps log doctor visits in plain English; a LangGraph agent with 5 tools fills in the record. LangGraph, FastAPI, PostgreSQL, React. Live demo." width="49%"></picture></a>
+  <a href="https://github.com/AnkitDimri4/Portfolio"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/project-portfolio-dark.png"><img src="assets/cards/project-portfolio-light.png" alt="Portfolio: React + Express + PostgreSQL: a free one-page resume builder, live GitHub and LeetCode stats, a live brain map and a Google Meet scheduler. 342 commits, 105 pull requests merged, 252 deployments (123 to production), Lighthouse 96 on mobile and 100 on desktop, and a calendar of my commits and the site's deployments by day: 14 active days since February 2026. Live demo." width="100%"></picture></a>
 </p>
 <p>
+  <a href="https://github.com/AnkitDimri4/ai-first-hcp-interaction-crm"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/project-hcp-crm-dark.png"><img src="assets/cards/project-hcp-crm-light.png" alt="AI-first HCP CRM: reps log doctor visits in plain English; a LangGraph agent with 5 tools fills in the record. LangGraph, FastAPI, PostgreSQL, React. Live demo." width="49%"></picture></a>
   <a href="https://github.com/AnkitDimri4/RN-WALLET"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/project-rn-wallet-dark.png"><img src="assets/cards/project-rn-wallet-light.png" alt="RN-Wallet: React Native expense tracker on Express and PostgreSQL; an ML service sorts transactions into categories. React Native, PostgreSQL, Redis, FastAPI." width="49%"></picture></a>
+</p>
+<p>
   <a href="https://github.com/AnkitDimri4/quickcart-mern"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/project-quickcart-dark.png"><img src="assets/cards/project-quickcart-light.png" alt="QuickCart: MERN store with JWT roles, Stripe payments, Cloudinary media and an admin dashboard. React, Node.js, MongoDB, Stripe. Live demo." width="49%"></picture></a>
 </p>
 <p>

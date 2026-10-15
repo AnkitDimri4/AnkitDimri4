@@ -1,0 +1,54 @@
+name: Portfolio card
+
+# The README's Portfolio card shows my commits, merged pull requests and deployments in the private
+# AnkitDimri4/Portfolio-app, with a day-by-day graph. This reads them again every 6 hours (and whenever
+# it's run by hand from the Actions tab), redraws the card and its description, and commits any change.
+# Reading the private repository takes the PORTFOLIO_STATS_TOKEN secret: a fine-grained token with
+# read-only Contents, Pull requests and Deployments on AnkitDimri4/Portfolio-app.
+on:
+  schedule:
+    - cron: "47 */6 * * *" # every 6 hours, at :47
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+# One group with the Brain map workflow: both commit to main, so they never push at once
+concurrency:
+  group: readme
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    name: Refresh the Portfolio card
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 22
+      - name: Read the numbers
+        id: numbers
+        env:
+          GH_TOKEN: ${{ secrets.PORTFOLIO_STATS_TOKEN }}
+        run: |
+          if [ -z "$GH_TOKEN" ]; then
+            echo "::notice::PORTFOLIO_STATS_TOKEN isn't set, so the Portfolio card wasn't refreshed."
+            exit 0
+          fi
+          node scripts/portfolio-activity.mjs
+          echo "read=true" >> "$GITHUB_OUTPUT"
+      - name: Draw the card
+        if: steps.numbers.outputs.read == 'true'
+        run: node scripts/readme-cards.mjs project-portfolio
+      - name: Commit any change
+        if: steps.numbers.outputs.read == 'true'
+        run: |
+          git add README.md assets/cards/portfolio-activity.json assets/cards/project-portfolio-light.png assets/cards/project-portfolio-dark.png
+          if git diff --cached --quiet; then echo "Nothing changed."; exit 0; fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Portfolio card: refresh its numbers and graph"
+          git pull --rebase --quiet
+          git push
