@@ -59,10 +59,13 @@ const WORK = {
   foot: "1,299 contributions · private repositories", cta: "Open on the brain map",
 };
 
-// In the resume's order. Each card links to its repository; `live` adds the "Live demo" mark.
+// In the resume's order. Each card links to its repository; `live` adds the "Live demo" mark, and
+// `stats` shows the project's numbers in the footer in place of the repository's name.
 const PROJECTS = [
   {
     slug: "portfolio", kind: "Full stack · My site", title: "Portfolio", repo: "Portfolio", live: true,
+    // Counted in the private repository where the work happens (its public copy is AnkitDimri4/Portfolio)
+    stats: "340+ commits · 100+ PRs · 130+ deploys",
     text: "React + Express + PostgreSQL: a free one-page resume builder, live GitHub and LeetCode stats, a live brain map and a Google Meet scheduler.",
     tech: [["react", "React"], ["vite", "Vite"], ["nodejs", "Node.js"], ["postgresql", "PostgreSQL"], ["calendar", "Google Calendar"]],
   },
@@ -166,7 +169,7 @@ function projectPage(p, t) {
   <h3>${p.title}</h3>
   <p>${p.text}</p>
   <div class="chips">${chips(p.tech, t)}</div>
-  <div class="foot"><span>${iconHtml("github", t)}${p.repo}</span>${p.live ? `<span class="live"><i></i>Live demo</span>` : "<span></span>"}</div>
+  <div class="foot"><span>${iconHtml("github", t)}${p.stats ?? p.repo}</span>${p.live ? `<span class="live"><i></i>Live demo</span>` : "<span></span>"}</div>
 </div></body></html>`;
 }
 

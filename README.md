@@ -34,7 +34,7 @@
 ### Projects
 
 <p>
-  <a href="https://github.com/AnkitDimri4/Portfolio"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/project-portfolio-dark.png"><img src="assets/cards/project-portfolio-light.png" alt="Portfolio: React, Express and PostgreSQL: a free one-page resume builder, live GitHub and LeetCode stats, a live brain map and a Google Meet scheduler. React, Vite, Node.js, PostgreSQL, Google Calendar. Live demo." width="49%"></picture></a>
+  <a href="https://github.com/AnkitDimri4/Portfolio"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/project-portfolio-dark.png"><img src="assets/cards/project-portfolio-light.png" alt="Portfolio: React, Express and PostgreSQL: a free one-page resume builder, live GitHub and LeetCode stats, a live brain map and a Google Meet scheduler. React, Vite, Node.js, PostgreSQL, Google Calendar. 340+ commits, 100+ pull requests and 130+ deploys. Live demo." width="49%"></picture></a>
   <a href="https://github.com/AnkitDimri4/ai-first-hcp-interaction-crm"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/project-hcp-crm-dark.png"><img src="assets/cards/project-hcp-crm-light.png" alt="AI-first HCP CRM: reps log doctor visits in plain English; a LangGraph agent with 5 tools fills in the record. LangGraph, FastAPI, PostgreSQL, React. Live demo." width="49%"></picture></a>
 </p>
 <p>
