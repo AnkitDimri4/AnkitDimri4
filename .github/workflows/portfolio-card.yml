@@ -1,14 +1,27 @@
 name: Portfolio card
 
 # The README's Portfolio card shows my commits, merged pull requests and deployments in the private
-# AnkitDimri4/Portfolio-app, with a day-by-day graph. This reads them again every 6 hours (and whenever
-# it's run by hand from the Actions tab), redraws the card and its description, and commits any change.
+# AnkitDimri4/Portfolio-app, with a day-by-day graph, and Lighthouse on the live site. This reads them
+# again after each merge there that changes the site or the API (Portfolio-app's Public copy workflow
+# runs this one with the merged commit, and it waits for that deploy first), every 6 hours, and whenever
+# it's run by hand from the Actions tab. It measures Lighthouse after each new deploy, redraws the card
+# and its description, and commits any change. The site's own activity card reads the same file,
+# portfolio-activity.json.
 # Reading the private repository takes the PORTFOLIO_STATS_TOKEN secret: a fine-grained token with
 # read-only Contents, Pull requests and Deployments on AnkitDimri4/Portfolio-app.
 on:
   schedule:
     - cron: "47 */6 * * *" # every 6 hours, at :47
   workflow_dispatch:
+    inputs:
+      after:
+        description: "A Portfolio-app commit whose deploy to wait for (its Public copy workflow fills this in)"
+        required: false
+        default: ""
+      lighthouse:
+        description: "Measure Lighthouse again, even with no new deploy"
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -22,7 +35,7 @@ jobs:
   refresh:
     name: Refresh the Portfolio card
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
@@ -32,13 +45,19 @@ jobs:
         id: numbers
         env:
           GH_TOKEN: ${{ secrets.PORTFOLIO_STATS_TOKEN }}
+          AFTER: ${{ inputs.after }}
         run: |
           if [ -z "$GH_TOKEN" ]; then
             echo "::notice::PORTFOLIO_STATS_TOKEN isn't set, so the Portfolio card wasn't refreshed."
             exit 0
           fi
-          node scripts/portfolio-activity.mjs
+          node scripts/portfolio-activity.mjs ${AFTER:+--after "$AFTER"}
           echo "read=true" >> "$GITHUB_OUTPUT"
+      - name: Measure Lighthouse on the live site
+        if: steps.numbers.outputs.read == 'true'
+        env:
+          FORCE: ${{ inputs.lighthouse && '--force' || '' }}
+        run: node scripts/lighthouse.mjs $FORCE
       - name: Draw the card
         if: steps.numbers.outputs.read == 'true'
         run: node scripts/readme-cards.mjs project-portfolio

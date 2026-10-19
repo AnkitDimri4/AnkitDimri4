@@ -4,8 +4,9 @@
 // map's style, light and dark (GitHub shows the one that matches the viewer's theme):
 //   assets/cards/intro-{light,dark}.png
 //   assets/cards/work-filesure-{light,dark}.png
-//   assets/cards/project-<slug>-{light,dark}.png (Portfolio's is wide, with its numbers and a day-by-day graph
-//     from assets/cards/portfolio-activity.json: node scripts/portfolio-activity.mjs refreshes them)
+//   assets/cards/project-<slug>-{light,dark}.png (Portfolio's is wide, with its numbers, Lighthouse and a
+//     day-by-day graph from assets/cards/portfolio-activity.json: node scripts/portfolio-activity.mjs
+//     refreshes the numbers, node scripts/lighthouse.mjs the Lighthouse scores)
 //   assets/cards/stack-{light,dark}.png
 //   assets/cards/link-<slug>-{light,dark}.png
 //
@@ -62,12 +63,12 @@ const WORK = {
 };
 
 // In the resume's order. Each card links to its repository (or `site`, with its `cta`); `live` adds the
-// "Live demo" mark, `highlight` an accent border, and `featured` draws it wide, with its numbers and graphs
-// (from portfolio-activity.json).
+// "Live demo" mark, `highlight` an accent border, and `featured` draws it wide, with its numbers, Lighthouse
+// on the live site and graphs (from portfolio-activity.json).
 const PROJECTS = [
   {
     slug: "portfolio", kind: "Full stack · My site", title: "Portfolio", repo: "Portfolio", live: true,
-    featured: true, lighthouse: [96, 100], // mobile, desktop: Lighthouse on the live site
+    featured: true,
     text: "React + Express + PostgreSQL: a one-page resume builder (PDFs from ₹1), live GitHub and LeetCode stats, a live brain map and a Google Meet scheduler.",
     tech: [["react", "React"], ["vite", "Vite"], ["nodejs", "Node.js"], ["postgresql", "PostgreSQL"], ["calendar", "Google Calendar"]],
   },
@@ -259,11 +260,12 @@ function featuredPage(p, a, t) {
   const busiestMonth = months.reduce((best, m) => (m.commits > best.commits ? m : best));
 
   const triangle = `<svg class="tri" viewBox="0 0 10 10"><path d="M5 1L9.5 9H.5Z" fill="${ink}"/></svg>`;
+  const lighthouse = a.lighthouse ?? { mobile: "–", desktop: "–" };
   const tiles = [
     ["git", num(a.totals.commits), "commits", `${perActiveDay(a.totals.commits, a)} per active day`],
     ["github", num(a.totals.mergedPullRequests), "pull requests merged", `${perActiveDay(a.totals.mergedPullRequests, a)} per active day`],
     ["vercel", num(a.totals.deployments), `deployments, ${num(a.totals.productionDeploys)} to production`, `${perActiveDay(a.totals.deployments, a)} per active day`],
-    ["sparkles", `${p.lighthouse[0]} · ${p.lighthouse[1]}`, "Lighthouse, mobile · desktop", "on the live site"],
+    ["lighthouse", `${lighthouse.mobile} · ${lighthouse.desktop}`, "Lighthouse, mobile · desktop", "on the live site"],
   ];
   return `<!doctype html><html><head><meta charset="utf-8"><style>${base(t, FEATURE_W, FEATURE_H)}
   .card {
@@ -444,8 +446,8 @@ try {
     const a = ACTIVITY.totals;
     const since = new Date(`${ACTIVITY.from}T00:00:00Z`).toLocaleDateString("en-GB", { month: "long", year: "numeric", timeZone: "UTC" });
     const alt = `${featured.title}: ${featured.text} ${num(a.commits)} commits, ${num(a.mergedPullRequests)} pull requests merged, ` +
-      `${num(a.deployments)} deployments (${num(a.productionDeploys)} to production), Lighthouse ${featured.lighthouse[0]} on mobile and ` +
-      `${featured.lighthouse[1]} on desktop. Graphs of my commits and the site's deployments, day by day and month by month: ` +
+      `${num(a.deployments)} deployments (${num(a.productionDeploys)} to production), Lighthouse ${ACTIVITY.lighthouse?.mobile} on mobile and ` +
+      `${ACTIVITY.lighthouse?.desktop} on desktop. Graphs of my commits and the site's deployments, day by day and month by month: ` +
       `${a.activeDays} active days since ${since}, with ${perActiveDay(a.commits, ACTIVITY)} commits, ${perActiveDay(a.mergedPullRequests, ACTIVITY)} ` +
       `pull requests and ${perActiveDay(a.deployments, ACTIVITY)} deployments per active day. Live demo.`;
     const readmeFile = path.join(root, "README.md");
