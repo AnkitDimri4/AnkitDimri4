@@ -7,7 +7,7 @@
   "totals": {
     "commits": 416,
     "mergedPullRequests": 139,
-    "deployments": 298,
+    "deployments": 299,
     "productionDeploys": 145,
     "activeDays": 17
   },
@@ -102,7 +102,7 @@
     "2026-10-19": {
       "commits": 30,
       "pullRequests": 14,
-      "deployments": 11
+      "deployments": 12
     }
   }
 }
