@@ -68,7 +68,7 @@ const PROJECTS = [
   {
     slug: "portfolio", kind: "Full stack · My site", title: "Portfolio", repo: "Portfolio", live: true,
     featured: true, lighthouse: [96, 100], // mobile, desktop: Lighthouse on the live site
-    text: "React + Express + PostgreSQL: a free one-page resume builder, live GitHub and LeetCode stats, a live brain map and a Google Meet scheduler.",
+    text: "React + Express + PostgreSQL: a one-page resume builder (PDFs from ₹1), live GitHub and LeetCode stats, a live brain map and a Google Meet scheduler.",
     tech: [["react", "React"], ["vite", "Vite"], ["nodejs", "Node.js"], ["postgresql", "PostgreSQL"], ["calendar", "Google Calendar"]],
   },
   {
