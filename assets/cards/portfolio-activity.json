@@ -13,10 +13,10 @@
   },
   "lastDeploy": "2026-10-19T01:52:34Z",
   "lighthouse": {
-    "mobile": 96,
+    "mobile": 97,
     "desktop": 100,
-    "measured": null,
-    "deploy": null
+    "measured": "2026-10-19",
+    "deploy": "2026-10-19T01:52:34Z"
   },
   "days": {
     "2026-02-02": {
