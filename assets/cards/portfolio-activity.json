@@ -5,18 +5,18 @@
   "from": "2026-02-02",
   "to": "2026-11-25",
   "totals": {
-    "commits": 801,
-    "mergedPullRequests": 298,
-    "deployments": 626,
-    "productionDeploys": 269,
-    "activeDays": 31
+    "commits": 803,
+    "mergedPullRequests": 299,
+    "deployments": 627,
+    "productionDeploys": 270,
+    "activeDays": 32
   },
-  "lastDeploy": "2026-11-23T05:50:04Z",
+  "lastDeploy": "2026-11-25T09:39:57Z",
   "lighthouse": {
-    "mobile": 97,
+    "mobile": 98,
     "desktop": 100,
-    "measured": "2026-11-23",
-    "deploy": "2026-11-23T05:50:04Z"
+    "measured": "2026-11-25",
+    "deploy": "2026-11-25T09:39:57Z"
   },
   "days": {
     "2026-02-02": {
@@ -180,9 +180,14 @@
       "deployments": 1
     },
     "2026-11-23": {
-      "commits": 2,
+      "commits": 3,
       "pullRequests": 1,
       "deployments": 3
+    },
+    "2026-11-25": {
+      "commits": 1,
+      "pullRequests": 1,
+      "deployments": 1
     }
   }
 }
